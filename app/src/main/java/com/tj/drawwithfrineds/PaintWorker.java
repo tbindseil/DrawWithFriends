@@ -16,12 +16,12 @@ class PaintWorker implements Runnable {
 
     @Override
     public void run() {
+        // Moves the current Thread into the background
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
         switch (task.getTask()) {
             case BitmapUpdateMessage.RANDOM_DRAW:
                 ImageView screen = task.getImageView();
-
-                // Moves the current Thread into the background
-                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
                 int[] colorsToDisplay = new int[screen.getWidth() * screen.getHeight()];
                 for (int i = 0; i < colorsToDisplay.length; i++) {
