@@ -20,13 +20,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".ListPaintingsActivity" />
+            android:label="@string/title_activity_login"
+            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"/>
+        <activity
+            android:name=".ListPaintingsActivity"
+            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity" />
         <activity android:name=".NewPaintingActivity" />
-        <activity android:name=".ToolSelectionActivity"></activity>
+        <activity
+            android:name=".ToolSelectionActivity"
+            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"/>
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
     </application>
 
