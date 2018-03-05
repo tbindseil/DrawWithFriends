@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.tj.drawwithfrineds.MainActivity">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -13,23 +14,9 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-        <!-- "Mark Favorite", should appear as action button if possible -->
-        <item
-            android:id="@+id/action_favorite"
-            android:icon="@drawable/ic_favorite_black_48dp"
-            android:title="@string/action_favorite"
-            android:showAsAction="ifRoom"/>
-
-        <!-- Settings, should always be in the overflow -->
-        <item android:id="@+id/action_settings"
-            android:title="@string/action_settings"
-            android:showAsAction="never"/>
-
-    </menu>
+    </android.support.v7.widget.Toolbar>
 
     <ImageView
         android:id="@+id/imageView"
