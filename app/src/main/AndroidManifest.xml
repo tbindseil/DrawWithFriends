@@ -14,22 +14,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"
+        <activity
+            android:name=".MainActivity"
+            android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity">
         </activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"/>
+        <activity android:name=".ListPaintingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".ListPaintingsActivity"
+            android:name=".NewPaintingActivity"
             android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity" />
-        <activity android:name=".NewPaintingActivity" />
         <activity
             android:name=".ToolSelectionActivity"
             android:parentActivityName="com.tj.drawwithfrineds.ListPaintingsActivity"/>

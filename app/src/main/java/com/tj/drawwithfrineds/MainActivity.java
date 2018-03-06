@@ -1,5 +1,6 @@
 package com.tj.drawwithfrineds;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,18 +19,25 @@ public class MainActivity extends AppCompatActivity {
     private PaintManager paintManager;
 
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-            Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-            setSupportActionBar(myToolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(R.string.MainActivityTitle);
+        setSupportActionBar(myToolbar);
 
-            paintManager = PaintManager.getInstance((ImageView)findViewById(R.id.imageView));
-        }
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        paintManager = PaintManager.getInstance((ImageView) findViewById(R.id.imageView));
+    }
 
     public void handleBitmapUpdateMessage(Message bitmapUpdate) {
-        BitmapUpdateMessage message = (BitmapUpdateMessage)bitmapUpdate.obj;
+        BitmapUpdateMessage message = (BitmapUpdateMessage) bitmapUpdate.obj;
     }
 
     @Override
