@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import java.util.Iterator;
 
 public class ToolSelectionActivity extends AppCompatActivity {
 
@@ -37,8 +45,27 @@ public class ToolSelectionActivity extends AppCompatActivity {
         return true;
     }
 
-    public void saveCurrentTool() {
-        return;
+    // start of tool bar handler code
+    public int saveCurrentTool() {
+        RadioGroup tools = (RadioGroup)findViewById(R.id.toolSelectGroup);
+
+        for (int i = 0; i < tools.getChildCount(); i++) {
+            View curr = tools.getChildAt(i);
+            if (curr instanceof RadioButton) {
+                if (((RadioButton) curr).isChecked()){
+                    switch (curr.getId()) {
+                        case (R.id.viewOnlyButton):
+                            return InputTool.VIEW_ONLY;
+                        case (R.id.pencilButton):
+                            return InputTool.PENCIL;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        return InputTool.VIEW_ONLY;
     }
 
     public void returnToMainActivity() {
@@ -47,14 +74,17 @@ public class ToolSelectionActivity extends AppCompatActivity {
     }
 
     @Override
+    // clear all other options
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(ToolSelectionActivity.this, MainActivity.class);
         switch (item.getItemId()) {
             case R.id.action_cancel:
-                returnToMainActivity();
+                startActivity(intent);
                 break;
             case R.id.action_save:
-                saveCurrentTool();
-                returnToMainActivity();
+                int selectedInput = saveCurrentTool();
+                intent.putExtra(getString(R.string.tool_select_intent), selectedInput);
+                startActivity(intent);
                 break;
             default:
                 break;

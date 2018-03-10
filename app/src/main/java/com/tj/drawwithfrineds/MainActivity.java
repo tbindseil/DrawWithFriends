@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -32,6 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        // display current tool in tool select button
+        Button toolSelectButton = findViewById(R.id.toolSelectButton);
+        int toolSelected = getIntent().getIntExtra(getString(R.string.tool_select_intent), 0);
+        switch (toolSelected) {
+            case InputTool.PENCIL:
+                toolSelectButton.setText(getString(R.string.pencil_tool));
+                break;
+            case InputTool.VIEW_ONLY:
+            default:
+                toolSelectButton.setText(getString(R.string.view_only_tool));
+                break;
+        }
 
         paintManager = PaintManager.getInstance((ImageView) findViewById(R.id.imageView));
     }
