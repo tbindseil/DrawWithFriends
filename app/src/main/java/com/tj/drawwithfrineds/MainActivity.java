@@ -46,4 +46,9 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.action_menu, menu);
         return true;
     }
+
+    public void onToolSelectButtonClick(View view) {
+        Intent intent = new Intent(MainActivity.this, ToolSelectionActivity.class);
+        startActivity(intent);
+    }
 }
