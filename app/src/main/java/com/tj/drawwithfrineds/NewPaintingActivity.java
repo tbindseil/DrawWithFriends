@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 
@@ -20,11 +21,12 @@ public class NewPaintingActivity extends AppCompatActivity {
         myToolbar.setTitle(R.string.NewPaintingActivityTitle);
         setSupportActionBar(myToolbar);
 
+        /* cancel action does this to emphasize that new painting won't be saved
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
         // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true); */
     }
 
     /**
@@ -40,5 +42,18 @@ public class NewPaintingActivity extends AppCompatActivity {
     public void onFinishButtonClicked(View view) {
         Intent intent = new Intent(NewPaintingActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_cancel:
+                Intent intent = new Intent(NewPaintingActivity.this, ListPaintingsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }
