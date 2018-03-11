@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private PaintManager paintManager;
+    private InputTool currInputTool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +36,34 @@ public class MainActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // display current tool in tool select button
+        // display current tool in tool select button and
+        // instantiate currInputTool
         Button toolSelectButton = findViewById(R.id.toolSelectButton);
         int toolSelected = getIntent().getIntExtra(getString(R.string.tool_select_intent), 0);
         switch (toolSelected) {
             case InputTool.PENCIL:
                 toolSelectButton.setText(getString(R.string.pencil_tool));
+                currInputTool = new PencilInputTool();
                 break;
             case InputTool.VIEW_ONLY:
             default:
                 toolSelectButton.setText(getString(R.string.view_only_tool));
+                currInputTool = new ViewOnlyInputTool();
                 break;
         }
 
-        paintManager = PaintManager.getInstance((ImageView) findViewById(R.id.imageView));
+        // setup canvas
+        paintManager = PaintManager.getInstance((ImageView) findViewById(R.id.canvas));
+
+        View canvas = findViewById(R.id.canvas);
+        canvas.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                BitmapUpdateMessage update = currInputTool.handleTouch(motionEvent, (ImageView) view);
+                PaintManager.getInstance((ImageView) view).handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+                return true;
+            }
+        });
     }
 
     public void handleBitmapUpdateMessage(Message bitmapUpdate) {

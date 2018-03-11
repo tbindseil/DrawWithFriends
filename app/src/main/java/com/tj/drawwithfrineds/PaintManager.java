@@ -19,10 +19,12 @@ public class PaintManager {
     private static PaintManager instance;
 
     private ImageView paintPad;
+    private int[] currPicture;
 
     private Handler mHanler;
     private ExecutorService threadControl;
 
+    // TODO instance should not require an imageview
     public static PaintManager getInstance(ImageView paintPad) {
         if (instance == null) {
             return new PaintManager(paintPad);
@@ -45,19 +47,35 @@ public class PaintManager {
             }
         };
 
+        // init picture
+        currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
+        for (int i = 0; i < currPicture.length; i++) {
+            currPicture[i] = (int)(0x00ffffff * Math.random());
+            currPicture[i] = currPicture[i] << 8;
+        }
+
         threadControl = Executors.newCachedThreadPool();
     }
 
+    // TODO mutex
+    public int[] getCurrPicture() {
+        return currPicture;
+    }
+
+    /* the create of BitmapUpdateMessage will be done by the InputTools
     public void drawRandomButton() {
         BitmapUpdateMessage randomTask = new BitmapUpdateMessage(paintPad, BitmapUpdateMessage.RANDOM_DRAW);
         threadControl.execute(new PaintWorker(randomTask));
-    }
+    }*/
 
     public void handleState(BitmapUpdateMessage update, int state) {
         switch (state) {
             case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
                 Message updateMessage = mHanler.obtainMessage(state, update);
                 updateMessage.sendToTarget();
+                break;
+            case BitmapUpdateMessage.BITMAP_UPDATE_REQUEST:
+                threadControl.execute(new PaintWorker(update));
                 break;
             default:
                 break;

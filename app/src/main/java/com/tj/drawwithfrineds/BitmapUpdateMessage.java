@@ -6,17 +6,26 @@ import android.widget.ImageView;
 /**
  * Created by TJ on 2/25/2018.
  */
-class BitmapUpdateMessage {
+public abstract class BitmapUpdateMessage {
     private PaintManager paintManager;
     private ImageView screen;
     private Bitmap bitmap;
     private int task;
 
     // types of tasks
-    public static final int RANDOM_DRAW = 0;
+    public static final int PENCIL_DRAW = 1;
+    public static final int RANDOM_DRAW = 2;
 
     // status
     public static final int BITMAP_RENDER_COMPLETE = 1;
+    public static final int BITMAP_UPDATE_REQUEST = 2;
+
+    // TODO do this better
+    public BitmapUpdateMessage() {
+        paintManager = null;
+        screen = null;
+        task = -1;
+    }
 
     public BitmapUpdateMessage(ImageView paintPad, int task) {
         paintManager = PaintManager.getInstance(paintPad);
