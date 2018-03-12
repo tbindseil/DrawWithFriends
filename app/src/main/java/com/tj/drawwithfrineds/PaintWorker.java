@@ -27,7 +27,7 @@ class PaintWorker implements Runnable {
                 PencilUpdateMessage castedTask = (PencilUpdateMessage) task;
                 Cord cords[] = castedTask.getCords();
                 for (int i = 0; i < cords.length; i++) {
-                    int offset = (canvas.getWidth() * cords[i].y) + cords[i].x;
+                    int offset = (canvas.getWidth() * cords[i].x) + cords[i].y;
                     colorsToDisplay[offset] = 0xffffff00;
                 }
 

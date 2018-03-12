@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
     private PaintManager paintManager;
     private InputTool currInputTool;
@@ -59,11 +61,24 @@ public class MainActivity extends AppCompatActivity {
         canvas.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                BitmapUpdateMessage update = currInputTool.handleTouch(motionEvent, (ImageView) view);
+                BitmapUpdateMessage update = currInputTool.handleTouch(null, (ImageView) view);
                 PaintManager.getInstance((ImageView) view).handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 return true;
             }
         });
+/*
+        try {
+            sleep(10000);
+        } catch (Exception e) {
+
+        }
+
+        drawT();*/
+    }
+
+    public void drawT() {
+        BitmapUpdateMessage update = currInputTool.handleTouch(null, (ImageView) findViewById(R.id.canvas));
+        PaintManager.getInstance((ImageView) findViewById(R.id.canvas)).handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
     }
 
     public void handleBitmapUpdateMessage(Message bitmapUpdate) {
