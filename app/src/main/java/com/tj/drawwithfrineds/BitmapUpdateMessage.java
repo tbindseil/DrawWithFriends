@@ -7,12 +7,12 @@ import android.widget.ImageView;
  * Created by TJ on 2/25/2018.
  */
 public abstract class BitmapUpdateMessage {
-    private PaintManager paintManager;
     private ImageView screen;
     private Bitmap bitmap;
     private int task;
 
     // types of tasks
+    public static final int INIT_DRAW = 0;
     public static final int PENCIL_DRAW = 1;
     public static final int RANDOM_DRAW = 2;
 
@@ -22,13 +22,11 @@ public abstract class BitmapUpdateMessage {
 
     // TODO do this better
     public BitmapUpdateMessage() {
-        paintManager = null;
         screen = null;
         task = -1;
     }
 
     public BitmapUpdateMessage(ImageView paintPad, int task) {
-        paintManager = PaintManager.getInstance(paintPad);
         screen = paintPad;
         this.task = task;
     }
@@ -48,7 +46,7 @@ public abstract class BitmapUpdateMessage {
     public void handleUpdateState(int state) {
         switch (state) {
             case BITMAP_RENDER_COMPLETE:
-                paintManager.handleState(this, state);
+                PaintManager.getInstance().handleState(this, state);
                 break;
             default:
                 break;

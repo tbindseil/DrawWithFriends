@@ -20,15 +20,28 @@ class PaintWorker implements Runnable {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         switch (task.getTask()) {
+            case BitmapUpdateMessage.INIT_DRAW: {
+                // TODO racecase
+                ImageView canvas = task.getImageView();
+
+                int[] colorsToDisplay = PaintManager.getInstance().initCurrPicture(canvas);
+                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+                task.setBitmap(toDisplay);
+                task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
+                break;
+            }
             case BitmapUpdateMessage.PENCIL_DRAW: {
                 ImageView canvas = task.getImageView();
 
-                int[] colorsToDisplay = PaintManager.getInstance(canvas).getCurrPicture();
+                int colorsToDisplay[] = PaintManager.getInstance().getCurrPicture();
                 PencilUpdateMessage castedTask = (PencilUpdateMessage) task;
                 Cord cords[] = castedTask.getCords();
                 for (int i = 0; i < cords.length; i++) {
-                    int offset = (canvas.getWidth() * cords[i].x) + cords[i].y;
-                    colorsToDisplay[offset] = 0xffffff00;
+                    int offset = (canvas.getWidth() * cords[i].y) + cords[i].x;
+                    if (offset < colorsToDisplay.length && offset >= 0)
+                        colorsToDisplay[offset] = 0xffffff00;
+                    else
+                        System.out.print(offset);
                 }
 
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
@@ -45,6 +58,7 @@ class PaintWorker implements Runnable {
                     colorsToDisplay[i] = colorsToDisplay[i] << 8;
                 }
 
+                int x = screen.getWidth();
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, screen.getWidth(), screen.getHeight(), Bitmap.Config.ARGB_8888);
                 task.setBitmap(toDisplay);
                 task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);

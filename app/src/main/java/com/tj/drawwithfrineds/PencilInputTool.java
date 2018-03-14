@@ -37,11 +37,11 @@ public class PencilInputTool extends InputTool {
 
         for (int i = 0; i < xCords.length; i++) {
             if (i < canvas.getWidth()) {
-                yCords[i] = canvas.getHeight() - 1;
+                yCords[i] = canvas.getHeight() / 2;
                 xCords[i] = i;
             }
             else {
-                yCords[i] = i - canvas.getHeight();
+                yCords[i] = i - canvas.getWidth();
                 xCords[i] = canvas.getWidth() / 2;
             }
         }

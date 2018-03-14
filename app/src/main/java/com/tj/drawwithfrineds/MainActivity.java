@@ -20,8 +20,9 @@ import android.widget.ImageView;
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
-    private PaintManager paintManager;
     private InputTool currInputTool;
+
+    private int[] currPicture = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 toolSelectButton.setText(getString(R.string.pencil_tool));
                 currInputTool = new PencilInputTool();
                 break;
+            case InputTool.RANDOM:
+                // TODO put these in r/strings
+                toolSelectButton.setText("Random");
+                currInputTool = new RandomInputTool();
+                break;
             case InputTool.VIEW_ONLY:
             default:
                 toolSelectButton.setText(getString(R.string.view_only_tool));
@@ -54,35 +60,25 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        // setup canvas
-        paintManager = PaintManager.getInstance((ImageView) findViewById(R.id.canvas));
-
         View canvas = findViewById(R.id.canvas);
+        // TODO racecase
         canvas.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                PaintManager.getInstance();
                 BitmapUpdateMessage update = currInputTool.handleTouch(null, (ImageView) view);
-                PaintManager.getInstance((ImageView) view).handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+                if (update != null)
+                    PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 return true;
             }
         });
-/*
-        try {
-            sleep(10000);
-        } catch (Exception e) {
-
-        }
-
-        drawT();*/
     }
 
-    public void drawT() {
-        BitmapUpdateMessage update = currInputTool.handleTouch(null, (ImageView) findViewById(R.id.canvas));
-        PaintManager.getInstance((ImageView) findViewById(R.id.canvas)).handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
-    }
-
-    public void handleBitmapUpdateMessage(Message bitmapUpdate) {
-        BitmapUpdateMessage message = (BitmapUpdateMessage) bitmapUpdate.obj;
+    public void onWindowFocusChanged(boolean hasFocus) {
+        // initialize picture
+        View canvas = findViewById(R.id.canvas);
+        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
+        PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
     }
 
     @Override
