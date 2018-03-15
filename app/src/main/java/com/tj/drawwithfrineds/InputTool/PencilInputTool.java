@@ -3,7 +3,9 @@ package com.tj.drawwithfrineds.InputTool;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import com.tj.drawwithfrineds.CanvasCord;
 import com.tj.drawwithfrineds.InputTool.InputTool;
+import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
@@ -14,27 +16,25 @@ import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 public class PencilInputTool extends InputTool {
     @Override
     public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
-        //debug
-        if (ev == null) {
-            return getTUpdate(canvas);
+        if (ev == null || canvas == null) {
+            return null;
         }
 
         // create bitmap update message
         PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW);
 
         final int historySize = ev.getHistorySize();
-        int xCords[] = new int[historySize];
-        int yCords[] = new int[historySize];
+        CanvasCord[] touchPoints = new CanvasCord[historySize];
 
         for (int i = 0; i < historySize; i++) {
-            xCords[i] = (int)ev.getHistoricalX(i);
-            yCords[i] = (int)ev.getHistoricalY(i);
+            touchPoints[i] = new CanvasCord(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)), canvas);
         }
 
-        update.setCords(xCords, yCords);
+        update.setCords(touchPoints);
         return update;
     }
 
+/*debug
     private BitmapUpdateMessage getTUpdate(ImageView canvas) {
         int xCords[] = new int[canvas.getHeight() + canvas.getWidth()];
         int yCords[] = new int[canvas.getHeight() + canvas.getWidth()];
@@ -52,5 +52,5 @@ public class PencilInputTool extends InputTool {
         PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW);
         update.setCords(xCords, yCords);
         return update;
-    }
+    }*/
 }
