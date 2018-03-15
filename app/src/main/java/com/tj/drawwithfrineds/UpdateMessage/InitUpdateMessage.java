@@ -1,6 +1,8 @@
-package com.tj.drawwithfrineds;
+package com.tj.drawwithfrineds.UpdateMessage;
 
 import android.widget.ImageView;
+
+import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
 /**
  * Created by TJ on 3/13/2018.

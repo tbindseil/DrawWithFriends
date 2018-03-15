@@ -3,6 +3,9 @@ package com.tj.drawwithfrineds;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
+
 /**
  * Created by TJ on 2/25/2018.
  */

@@ -1,6 +1,8 @@
-package com.tj.drawwithfrineds;
+package com.tj.drawwithfrineds.UpdateMessage;
 
 import android.widget.ImageView;
+
+import com.tj.drawwithfrineds.Cord;
 
 /**
  * Created by TJ on 3/11/2018.

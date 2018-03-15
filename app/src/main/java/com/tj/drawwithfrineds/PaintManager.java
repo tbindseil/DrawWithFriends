@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.ImageView;
 
+import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

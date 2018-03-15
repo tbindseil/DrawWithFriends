@@ -1,7 +1,11 @@
-package com.tj.drawwithfrineds;
+package com.tj.drawwithfrineds.InputTool;
 
 import android.view.MotionEvent;
 import android.widget.ImageView;
+
+import com.tj.drawwithfrineds.InputTool.InputTool;
+import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
 /**
  * Created by TJ on 3/10/2018.
