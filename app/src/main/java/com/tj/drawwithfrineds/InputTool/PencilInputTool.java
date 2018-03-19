@@ -9,11 +9,21 @@ import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by TJ on 3/10/2018.
  */
 
 public class PencilInputTool extends InputTool {
+    public static final int THICKNESS_1 = 32;
+    private int thickness;
+
+    public PencilInputTool(int thickness) {
+        this.thickness = thickness;
+    }
+
     @Override
     public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
         if (ev == null || canvas == null) {
@@ -24,10 +34,23 @@ public class PencilInputTool extends InputTool {
         PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW);
 
         final int historySize = ev.getHistorySize();
-        CanvasCord[] touchPoints = new CanvasCord[historySize];
+        List<CanvasCord> touchPoints = new ArrayList<CanvasCord>();
 
         for (int i = 0; i < historySize; i++) {
-            touchPoints[i] = new CanvasCord(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)), canvas);
+            touchPoints.add(new CanvasCord(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)), canvas));
+            // wow such algo... maybe a hash????
+            for (int j = 0 ; j < thickness; j++) {
+                for (int k = 0; k < thickness; k++) {
+                    int x = touchPoints.get(touchPoints.size() - 1).x;
+                    int y = touchPoints.get(touchPoints.size() - 1).y;
+
+                    x = x + j;
+                    y = y + k;
+                    if (x < canvas.getWidth() && y < canvas.getHeight()) {
+                        touchPoints.add(new CanvasCord(x, y));
+                    }
+                }
+            }
         }
 
         update.setCords(touchPoints);

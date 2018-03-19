@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.InputTool.PencilInputTool;
+import com.tj.drawwithfrineds.InputTool.QuadrantInputTool;
 import com.tj.drawwithfrineds.InputTool.RandomInputTool;
 import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
@@ -47,12 +48,16 @@ public class MainActivity extends AppCompatActivity {
         switch (toolSelected) {
             case InputTool.PENCIL:
                 toolSelectButton.setText(getString(R.string.pencil_tool));
-                currInputTool = new PencilInputTool();
+                currInputTool = new PencilInputTool(PencilInputTool.THICKNESS_1);
                 break;
             case InputTool.RANDOM:
                 // TODO put these in r/strings
                 toolSelectButton.setText("Random");
                 currInputTool = new RandomInputTool();
+                break;
+            case InputTool.QUADRANT:
+                toolSelectButton.setText("Quadrant");
+                currInputTool = new QuadrantInputTool();
                 break;
             case InputTool.VIEW_ONLY:
             default:
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 PaintManager.getInstance();
-                BitmapUpdateMessage update = currInputTool.handleTouch(null, (ImageView) view);
+                BitmapUpdateMessage update = currInputTool.handleTouch(motionEvent, (ImageView) view);
                 if (update != null)
                     PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 return true;

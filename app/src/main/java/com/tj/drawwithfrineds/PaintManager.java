@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 // ideas, different threads for different sections of pic?
 
 public class PaintManager {
+    int requestCount;
     private static PaintManager instance;
 
     private int[] currPicture;
@@ -37,6 +39,7 @@ public class PaintManager {
     }
 
     private PaintManager() {
+        requestCount = 0;
         // start paint thread and establish messaging handlers
         mHanler  = new Handler(Looper.getMainLooper()) {
             @Override
@@ -57,6 +60,8 @@ public class PaintManager {
                 updateMessage.sendToTarget();
                 break;
             case BitmapUpdateMessage.BITMAP_UPDATE_REQUEST:
+                requestCount++;
+                Log.e("PaintManager", "requestCount is " + requestCount);
                 threadControl.execute(new PaintWorker(update));
                 break;
             default:

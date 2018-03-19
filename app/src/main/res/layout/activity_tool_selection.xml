@@ -43,6 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Random" />
+
+        <RadioButton
+            android:id="@+id/quadrantButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quadrant" />
     </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>

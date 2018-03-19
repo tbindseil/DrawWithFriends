@@ -17,6 +17,7 @@ public abstract class BitmapUpdateMessage {
     public static final int INIT_DRAW = 0;
     public static final int PENCIL_DRAW = 1;
     public static final int RANDOM_DRAW = 2;
+    public static final int QUADRANT_DRAW = 3;
 
     // status
     public static final int BITMAP_RENDER_COMPLETE = 1;

@@ -56,6 +56,8 @@ public class ToolSelectionActivity extends AppCompatActivity {
                             return InputTool.PENCIL;
                         case (R.id.randomButton):
                             return InputTool.RANDOM;
+                        case (R.id.quadrantButton):
+                            return InputTool.QUADRANT;
                         default:
                             break;
                     }
