@@ -5,11 +5,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.InputTool.PencilInputTool;
@@ -18,6 +20,11 @@ import com.tj.drawwithfrineds.InputTool.RandomInputTool;
 import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.InitUpdateMessage;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 
 import static java.lang.Thread.sleep;
 
@@ -31,8 +38,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String paintingFileName = getIntent().getStringExtra(getString(R.string.painting_to_load));
+        String paintingTitle = "";
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(new File(this.getApplicationContext().getFilesDir(), paintingFileName)));
+            paintingTitle = in.readLine();
+        } catch (Exception e) {
+            // TODO
+            Log.e("onCreate", "failed to read paintingFile");
+        }
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(R.string.MainActivityTitle);
+        // TODO give title its own line or in toolbar??
+        myToolbar.setTitle(paintingTitle);
         setSupportActionBar(myToolbar);
 
         // Get a support ActionBar corresponding to this toolbar

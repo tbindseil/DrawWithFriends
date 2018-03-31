@@ -1,13 +1,20 @@
 package com.tj.drawwithfrineds;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 
 public class NewPaintingActivity extends AppCompatActivity {
@@ -20,13 +27,6 @@ public class NewPaintingActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.NewPaintingActivityTitle);
         setSupportActionBar(myToolbar);
-
-        /* cancel action does this to emphasize that new painting won't be saved
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true); */
     }
 
     /**
@@ -39,8 +39,55 @@ public class NewPaintingActivity extends AppCompatActivity {
         return true;
     }
 
+    // replace any non alphanumeric character with '_'
+    public String getNextFileName(String paintingName) {
+        StringBuffer filenameBuf = new StringBuffer(paintingName.length());
+        for (int i = 0; i < paintingName.length(); i++) {
+            if ((paintingName.charAt(i) >= '0' && paintingName.charAt(i) <= '9') ||
+                    (paintingName.charAt(i) >= 'a' && paintingName.charAt(i) <= 'Z')) {
+                filenameBuf.append(paintingName.charAt(i));
+            }
+            else {
+                filenameBuf.append('_');
+            }
+        }
+        return filenameBuf.toString();
+    }
+
+    public boolean createPaintingFile(String paintingName, String filename) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            // first line of all paintingFiles is the painting name
+            outputStream.write(paintingName.getBytes());
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            // TODO
+            Log.e("createPaintingFile", "createNewFile failed");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isValidPaintingName(String paintingName) {
+        // must be unique
+        // TODO
+        return true;
+    }
+
     public void onFinishButtonClicked(View view) {
+        EditText paintingTitleEditText = findViewById(R.id.enterPaintingTitle);
+        String paintingName = paintingTitleEditText.getText().toString();
+        if (!isValidPaintingName(paintingName)) {
+            // TODO
+        }
+        String filename = getNextFileName(paintingName);
+        if (createPaintingFile(paintingName, filename)) {
+            // TODO
+        }
         Intent intent = new Intent(NewPaintingActivity.this, MainActivity.class);
+        intent.putExtra(getString(R.string.painting_to_load), filename);
         startActivity(intent);
     }
 

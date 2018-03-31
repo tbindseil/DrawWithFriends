@@ -34,6 +34,7 @@
 
     <!-- Strings for intents -->
     <string name="tool_select_intent">Tool Select</string>
+    <string name="painting_to_load">Painting To Load</string>
 
     <!-- Strings for tool names -->
     <string name="view_only_tool">View Only</string>

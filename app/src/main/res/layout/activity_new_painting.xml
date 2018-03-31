@@ -17,15 +17,31 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <EditText
+        android:id="@+id/enterPaintingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="93dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="6"
+        android:text="Enter Painting Title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Finish"
         android:onClick="onFinishButtonClicked"
+        android:text="Finish"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/enterPaintingTitle" />
 
 </android.support.constraint.ConstraintLayout>
