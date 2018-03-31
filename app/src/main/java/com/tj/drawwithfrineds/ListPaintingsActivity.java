@@ -7,8 +7,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 
 public class ListPaintingsActivity extends AppCompatActivity {
+
+    private void displayPaintings() {
+        File[] allProjects = this.getApplicationContext().getFilesDir().listFiles();
+
+        LinearLayout ll = findViewById(R.id.painting_list);
+        BufferedReader in;
+        for (int i = 0; i < allProjects.length; i++) {
+            try {
+                in = new BufferedReader(new FileReader(allProjects[i]));
+                String currProjectTitle = in.readLine();
+                TextView curr = new TextView(this.getApplicationContext());
+                curr.setText(currProjectTitle);
+                ll.addView(curr);
+            } catch (Exception e) {
+                // TODO handle exception
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +42,8 @@ public class ListPaintingsActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ListPaintingsActivityTitle);
         setSupportActionBar(myToolbar);
+
+        displayPaintings();
     }
 
     /**

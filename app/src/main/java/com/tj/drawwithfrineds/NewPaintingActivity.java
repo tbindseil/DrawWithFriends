@@ -59,6 +59,7 @@ public class NewPaintingActivity extends AppCompatActivity {
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             // first line of all paintingFiles is the painting name
+            // TODO maybe a magic string for first line to show it is a painting file?
             outputStream.write(paintingName.getBytes());
             outputStream.flush();
             outputStream.close();
