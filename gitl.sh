@@ -6,7 +6,9 @@ set -e
 
 # make strings
 DESCRIPTION="test"
+# TODO 
 DESCRIPTION_FIRST_CAP=$(echo $DESCRIPTION | awk '{print toupper($0)}')
+DESCRIPTION_ALL_CAP=$(echo $DESCRIPTION | awk '{print toupper($0)}')
 
 INPUT_TOOL_PATH=$(dirname $(find ./ -name InputTool.java))
 
@@ -22,7 +24,7 @@ INPUT_TOOL_SUB+="InputTool.java"
 # assumes: vals go up and last one is greatest
 INPUT_TOOL_VAL=$(grep "public static final int" "$INPUT_TOOL_SUPER" | tail -n 1 | cut -d " " -f 11 | cut -d ";" -f 1)
 let "INPUT_TOOL_VAL=$INPUT_TOOL_VAL+1"
-cat $INPUT_TOOL_SUPER | sed "/End of InputTool Vals/i public static final int $DESCRIPTION = $INPUT_TOOL_VAL;" $INPUT_TOOL_SUPER |
+cat $INPUT_TOOL_SUPER | sed "/End of InputTool Vals/i public static final int $DESCRIPTION = $INPUT_TOOL_VAL;" |
         sed "s/public static final int $DESCRIPTION = $INPUT_TOOL_VAL;/    &/" > tmp
 mv tmp $INPUT_TOOL_SUPER
 
@@ -43,9 +45,26 @@ echo "        return NULL;" >> "$INPUT_TOOL_SUB"
 echo "    }" >> "$INPUT_TOOL_SUB"
 echo "}" >> "$INPUT_TOOL_SUB"
 
-#cat InputToolTemplate | sed "s/\$DESCRIPTION_FIRST_CAP/$`echo $DESCRIPTION_FIRST_CAP`/" > "$INPUT_TOOL_SUB"
-
 # add section to switch in mainact
+STR4="case InputTool."
+STR4+="$DESCRIPTION_ALL_CAP"
+STR4+=":"
+STR3="toolSelectButton.setText(getString(R.string."
+STR3+="$DESCRIPTION"
+STR3+="_tool));"
+STR2="currInputTool = new "
+STR2+="$DESCRIPTION_FIRST_CAP"
+STR2+="InputTool();"
+STR1="break;"
+cat $(find ./ -name MainActivity.java) | sed "/switch (toolSelected) {/a $STR1" |
+        sed "s/$STR1/                &/" |
+        sed "/switch (toolSelected) {/ a $STR2" |
+        sed "s/$STR2/                &/" |
+        sed "/switch (toolSelected) {/ a $STR3" |
+        sed "s/$STR3/                &/" |
+        sed "/switch (toolSelected) {/ a $STR4" |
+        sed "s/$STR4/            &/" > tmp
+mv tmp $(find ./ -name MainActivity.java)
 
 # paint worker handle update message
 
