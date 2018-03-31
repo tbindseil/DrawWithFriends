@@ -3,6 +3,9 @@
 set -e
 
 # make sure git status is clean
+if [ "$1" -ne "committed" ]; then
+    exit
+fi
 
 # make strings
 DESCRIPTION="test"
