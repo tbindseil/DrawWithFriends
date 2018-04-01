@@ -4,11 +4,17 @@ set -e
 
 # make sure git status is clean
 if [ "$1" != "committed" ]; then
+    echo "must say committed so you know you could change unsaved stuff"
+    exit
+fi
+
+if [ -z "$2" ]; then
+    echo "usage: ./gitl.sh committed <Description>"
     exit
 fi
 
 # make strings
-DESCRIPTION_FIRST_CAP="Test"
+DESCRIPTION_FIRST_CAP="$2"
 DESCRIPTION_ALL_CAP=$(echo $DESCRIPTION_FIRST_CAP | awk '{print toupper($0)}')
 DESCRIPTION=$(echo $DESCRIPTION_FIRST_CAP | awk '{print tolower($0)}')
 
