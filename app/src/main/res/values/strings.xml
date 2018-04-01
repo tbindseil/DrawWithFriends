@@ -39,4 +39,5 @@
     <!-- Strings for tool names -->
     <string name="view_only_tool">View Only</string>
     <string name="pencil_tool">Pencil</string>
+    <!-- End of Strings for tool names -->
 </resources>
