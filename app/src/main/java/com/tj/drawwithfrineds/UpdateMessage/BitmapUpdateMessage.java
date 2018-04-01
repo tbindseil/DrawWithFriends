@@ -13,16 +13,16 @@ public abstract class BitmapUpdateMessage {
     private Bitmap bitmap;
     private int task;
 
+    // status
+    public static final int BITMAP_RENDER_COMPLETE = 1;
+    public static final int BITMAP_UPDATE_REQUEST = 2;
+
     // Beginning of BitmapUpdateMessage Vals
     public static final int INIT_DRAW = 0;
     public static final int PENCIL_DRAW = 1;
     public static final int RANDOM_DRAW = 2;
     public static final int QUADRANT_DRAW = 3;
     // End of BitmapUpdateMessage Vals
-
-    // status
-    public static final int BITMAP_RENDER_COMPLETE = 1;
-    public static final int BITMAP_UPDATE_REQUEST = 2;
 
     // TODO do this better
     public BitmapUpdateMessage() {
