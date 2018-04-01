@@ -8,10 +8,9 @@ if [ "$1" != "committed" ]; then
 fi
 
 # make strings
-DESCRIPTION="test"
-# TODO 
-DESCRIPTION_FIRST_CAP=$(echo $DESCRIPTION | awk '{print toupper($0)}')
-DESCRIPTION_ALL_CAP=$(echo $DESCRIPTION | awk '{print toupper($0)}')
+DESCRIPTION_FIRST_CAP="Test"
+DESCRIPTION_ALL_CAP=$(echo $DESCRIPTION_FIRST_CAP | awk '{print toupper($0)}')
+DESCRIPTION=$(echo $DESCRIPTION_FIRST_CAP | awk '{print tolower($0)}')
 
 INPUT_TOOL_PATH=$(dirname $(find ./ -name InputTool.java))
 
@@ -42,7 +41,6 @@ cat $INPUT_TOOL_SUPER | sed "/End of InputTool Vals/i public static final int $D
 mv tmp $INPUT_TOOL_SUPER
 
 # generate input tool subclass
-
 echo "package com.tj.drawwithfrineds.InputTool;" > "$INPUT_TOOL_SUB"
 echo "" >> "$INPUT_TOOL_SUB"
 echo "import android.widget.ImageView;" >> "$INPUT_TOOL_SUB"
@@ -126,6 +124,26 @@ echo "    }" >> "$BITMAP_UPDATE_SUB"
 echo "}" >> "$BITMAP_UPDATE_SUB"
 
 # radio button in tool select act layout
+STR1="<RadioButton"
+STR2="android:id=\"@+id\/"
+STR2+="$DESCRIPTION"
+STR2+="Button\""
+STR3="android:layout_width=\"match_parent\""
+STR4="android:layout_height=\"wrap_content\""
+STR5="android:text=\""
+STR5+="$DESCRIPTION_FIRST_CAP"
+STR5+="\"\/>"
+cat $(find ./ -name activity_tool_selection.xml) | sed "/End Tool Radio Buttons/i $STR1" |
+    sed "s/$STR1/    &/" |
+    sed "/End Tool Radio Buttons/i $STR2" |
+    sed "s/$STR2/    &/" |
+    sed "/End Tool Radio Buttons/i $STR3" |
+    sed "s/$STR3/    &/" |
+    sed "/End Tool Radio Buttons/i $STR4" |
+    sed "s/$STR4/    &/" |
+    sed "/End Tool Radio Buttons/i $STR5" |
+    sed "s/$STR5/    &/" > tmp
+mv tmp $(find ./ -name activity_tool_selection.xml)
 
 # string val
 STR1="<string name=\""
