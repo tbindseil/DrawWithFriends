@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.graphics.Bitmap;
+import android.os.Process;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -23,7 +24,7 @@ class PaintWorker implements Runnable {
     @Override
     public void run() {
         // Moves the current Thread into the background
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
 
         switch (task.getTask()) {
             case BitmapUpdateMessage.INIT_DRAW: {
