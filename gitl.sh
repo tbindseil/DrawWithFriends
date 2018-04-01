@@ -115,6 +115,15 @@ cat $BITMAP_UPDATE_SUPER | sed "/End of BitmapUpdateMessage Vals/i public static
 mv tmp $BITMAP_UPDATE_SUPER
 
 # update message subclass
+echo "package com.tj.drawwithfrineds.UpdateMessage;" > "$BITMAP_UPDATE_SUB"
+echo "" >> "$BITMAP_UPDATE_SUB"
+echo "import android.widget.ImageView;" >> "$BITMAP_UPDATE_SUB"
+echo "" >> "$BITMAP_UPDATE_SUB"
+echo "public class "$Description_FIRST_CAP"UpdateMessage extends BitmapUpdateMessage {" >> "$BITMAP_UPDATE_SUB"
+echo "    public "$Description_FIRST_CAP"UpdateMessage(ImageView paintPad, int task) {" >> "$BITMAP_UPDATE_SUB"
+echo "        super(paintPad, task);" >> "$BITMAP_UPDATE_SUB"
+echo "    }" >> "$BITMAP_UPDATE_SUB"
+echo "}" >> "$BITMAP_UPDATE_SUB"
 
 # radio button in tool select act layout
 
