@@ -23,12 +23,22 @@ INPUT_TOOL_SUB+="/"
 INPUT_TOOL_SUB+="$DESCRIPTION_FIRST_CAP"
 INPUT_TOOL_SUB+="InputTool.java"
 
+BITMAP_UPDATE_PATH=$(dirname $(find ./ -name BitmapUpdateMessage.java))
+
+BITMAP_UPDATE_SUPER="$BITMAP_UPDATE_PATH"
+BITMAP_UPDATE_SUPER+="/BitmapUpdateMessage.java"
+
+BITMAP_UPDATE_SUB="$BITMAP_UPDATE_PATH"
+BITMAP_UPDATE_SUB+="/"
+BITMAP_UPDATE_SUB+="$DESCRIPTION_FIRST_CAP"
+BITMAP_UPDATE_SUB+="UpdateMessage.java"
+
 # add string thing to input tool superclass
 # assumes: vals go up and last one is greatest
 INPUT_TOOL_VAL=$(grep "public static final int" "$INPUT_TOOL_SUPER" | tail -n 1 | cut -d " " -f 11 | cut -d ";" -f 1)
 let "INPUT_TOOL_VAL=$INPUT_TOOL_VAL+1"
 cat $INPUT_TOOL_SUPER | sed "/End of InputTool Vals/i public static final int $DESCRIPTION = $INPUT_TOOL_VAL;" |
-        sed "s/public static final int $DESCRIPTION = $INPUT_TOOL_VAL;/    &/" > tmp
+        sed "s/public static final int $DESCRIPTION_ALL_CAP = $INPUT_TOOL_VAL;/    &/" > tmp
 mv tmp $INPUT_TOOL_SUPER
 
 # generate input tool subclass
@@ -98,6 +108,11 @@ cat $(find ./ -name ToolSelectionActivity.java) | sed "/switch (curr.getId()) {/
 mv tmp $(find ./ -name ToolSelectionActivity.java)
 
 # bitmap update message int
+BITMAP_UPDATE_VAL=$(grep "public static final int" "$BITMAP_UPDATE_SUPER" | tail -n 1 | cut -d " " -f 11 | cut -d ";" -f 1)
+let "BITMAP_UPDATE_VAL=$BITMAP_UPDATE_VAL+1"
+cat $BITMAP_UPDATE_SUPER | sed "/End of BitmapUpdateMessage Vals/i public static final int $DESCRIPTION_ALL_CAP = $BITMAP_UPDATE_VAL;" |
+        sed "s/public static final int $DESCRIPTION_ALL_CAP = $BITMAP_UPDATE_VAL;/    &/" > tmp
+mv tmp $BITMAP_UPDATE_SUPER
 
 # update message subclass
 
