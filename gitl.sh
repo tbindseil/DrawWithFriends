@@ -109,10 +109,7 @@ mv tmp $(find ./ -name ToolSelectionActivity.java)
 
 # bitmap update message int
 BITMAP_UPDATE_VAL=$(grep "public static final int" "$BITMAP_UPDATE_SUPER" | tail -n 1 | cut -d " " -f 11 | cut -d ";" -f 1)
-echo "BITMAP_UPDATE_VAL is $BITMAP_UPDATE_VAL"
 let "BITMAP_UPDATE_VAL=$BITMAP_UPDATE_VAL+1"
-echo "BITMAP_UPDATE_VAL is $BITMAP_UPDATE_VAL"
-
 cat $BITMAP_UPDATE_SUPER | sed "/End of BitmapUpdateMessage Vals/i public static final int $(echo $DESCRIPTION_ALL_CAP)_DRAW = $BITMAP_UPDATE_VAL;" |
         sed "s/public static final int $(echo $DESCRIPTION_ALL_CAP)_DRAW = $BITMAP_UPDATE_VAL;/    &/" > tmp
 mv tmp $BITMAP_UPDATE_SUPER
@@ -122,3 +119,11 @@ mv tmp $BITMAP_UPDATE_SUPER
 # radio button in tool select act layout
 
 # string val
+STR1="<string name=\""
+STR1+="$DESCRIPTION"
+STR1+="_tool\">"
+STR1+="$DESCRIPTION_FIRST_CAP"
+STR1+="<\/string>"
+cat $(find ./ -name strings.xml) | sed "/End of Strings for tool names/i $STR1" |
+        sed "s/$STR1/    &/" > tmp
+mv tmp $(find ./ -name strings.xml)
