@@ -3,7 +3,6 @@ package com.tj.drawwithfrineds.InputTool;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import com.tj.drawwithfrineds.CanvasCord;
 import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 
 public class PencilInputTool extends InputTool {
-    public static final int THICKNESS_1 = 32;
+    public static final int THICKNESS_1 = 256;
     private int thickness;
 
     public PencilInputTool(int thickness) {
@@ -31,30 +30,25 @@ public class PencilInputTool extends InputTool {
         }
 
         // create bitmap update message
-        PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW);
+        PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW, thickness);
 
-        final int historySize = ev.getHistorySize();
-        List<CanvasCord> touchPoints = new ArrayList<CanvasCord>();
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                int historySize = ev.getHistorySize();
+                List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
+                touchPoints.add(new ScreenCord(ev.getX(), ev.getY()));
+                /*
+                for (int i = 0; i < historySize; i++) {
+                    touchPoints.add(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)));
+                }*/
 
-        for (int i = 0; i < historySize; i++) {
-            touchPoints.add(new CanvasCord(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)), canvas));
-            // wow such algo... maybe a hash????
-            for (int j = 0 ; j < thickness; j++) {
-                for (int k = 0; k < thickness; k++) {
-                    int x = touchPoints.get(touchPoints.size() - 1).x;
-                    int y = touchPoints.get(touchPoints.size() - 1).y;
-
-                    x = x + j;
-                    y = y + k;
-                    if (x < canvas.getWidth() && y < canvas.getHeight()) {
-                        touchPoints.add(new CanvasCord(x, y));
-                    }
-                }
-            }
+                update.setCords(touchPoints);
+                return update;
+            default:
+                break;
         }
 
-        update.setCords(touchPoints);
-        return update;
+        return null;
     }
 
 /*debug

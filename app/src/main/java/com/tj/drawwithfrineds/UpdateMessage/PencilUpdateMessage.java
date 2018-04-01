@@ -2,7 +2,7 @@ package com.tj.drawwithfrineds.UpdateMessage;
 
 import android.widget.ImageView;
 
-import com.tj.drawwithfrineds.CanvasCord;
+import com.tj.drawwithfrineds.ScreenCord;
 
 import java.util.List;
 
@@ -11,17 +11,27 @@ import java.util.List;
  */
 
 public class PencilUpdateMessage extends BitmapUpdateMessage {
-    private List<CanvasCord> canvasCords;
+    private List<ScreenCord> screenCords;
+    private int thickness;
 
-    public PencilUpdateMessage(ImageView paintPad, int task) {
+    public PencilUpdateMessage(ImageView paintPad, int task, int thickness) {
         super(paintPad, task);
+        this.thickness = thickness;
     }
 
-    public void setCords(List<CanvasCord> cords) {
-        this.canvasCords = cords;
+    public void setCords(List<ScreenCord> cords) {
+        this.screenCords = cords;
     }
 
-    public List<CanvasCord> getCanvasCords() {
-        return canvasCords;
+    public List<ScreenCord> getCanvasCords() {
+        return screenCords;
+    }
+
+    public void setThickness(int thickness) {
+        this.thickness = thickness;
+    }
+
+    public int getThickness() {
+        return thickness;
     }
 }

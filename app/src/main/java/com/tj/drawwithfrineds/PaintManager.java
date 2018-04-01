@@ -19,7 +19,8 @@ import java.util.concurrent.Executors;
 // ideas, different threads for different sections of pic?
 
 public class PaintManager {
-    int requestCount;
+    private int requestCount;
+    private int updateCount;
     private static PaintManager instance;
 
     private int[] currPicture;
@@ -40,6 +41,7 @@ public class PaintManager {
 
     private PaintManager() {
         requestCount = 0;
+        updateCount = 0;
         // start paint thread and establish messaging handlers
         mHanler  = new Handler(Looper.getMainLooper()) {
             @Override
@@ -56,6 +58,8 @@ public class PaintManager {
     public void handleState(BitmapUpdateMessage update, int state) {
         switch (state) {
             case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
+                updateCount++;
+                Log.e("PaintManager", "updateCount is " + updateCount);
                 Message updateMessage = mHanler.obtainMessage(state, update);
                 updateMessage.sendToTarget();
                 break;
@@ -84,4 +88,6 @@ public class PaintManager {
     public int[] getCurrPicture() {
         return currPicture;
     }
+
+    public void setCurrPicture(int[] picture) {currPicture = picture;}
 }

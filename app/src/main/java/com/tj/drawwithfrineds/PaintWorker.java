@@ -1,13 +1,13 @@
 package com.tj.drawwithfrineds;
 
 import android.graphics.Bitmap;
-import android.os.Process;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ class PaintWorker implements Runnable {
     @Override
     public void run() {
         // Moves the current Thread into the background
-        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DEFAULT);
 
         switch (task.getTask()) {
             case BitmapUpdateMessage.INIT_DRAW: {
@@ -38,19 +38,45 @@ class PaintWorker implements Runnable {
                 break;
             }
             case BitmapUpdateMessage.PENCIL_DRAW: {
+
                 ImageView canvas = task.getImageView();
 
                 int colorsToDisplay[] = PaintManager.getInstance().getCurrPicture();
                 PencilUpdateMessage castedTask = (PencilUpdateMessage) task;
-                List<CanvasCord> canvasCords = castedTask.getCanvasCords();
+
+                // convert touch point to a pixel
+                List<CanvasCord> canvasCords = new ArrayList<CanvasCord>();
+                List<ScreenCord> screenCords = castedTask.getCanvasCords();
+                int thickness = castedTask.getThickness();
+                for (int i = 0; i < screenCords.size(); i++) {
+                    canvasCords.add(new CanvasCord(screenCords.get(i), canvas));
+                    int x = canvasCords.get(canvasCords.size() - 1).x;
+                    int y = canvasCords.get(canvasCords.size() - 1).y;
+                    // wow such algo... maybe a hash????
+                    for (int j = 0 ; j < thickness; j++) {
+                        for (int k = 0; k < thickness; k++) {
+                            int currX = x + j;
+                            int currY = y + k;
+                            if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
+                                canvasCords.add(new CanvasCord(currX, currY));
+                            }
+                        }
+                    }
+                }
+
                 for (int i = 0; i < canvasCords.size(); i++) {
+                    Log.e("PencilDrawTask", "i is " + i + " x is " + canvasCords.get(i).x + " y is " + canvasCords.get(i).y);
                     int offset = (canvas.getWidth() * canvasCords.get(i).y) + canvasCords.get(i).x;
                     if (offset < colorsToDisplay.length && offset >= 0)
-                        colorsToDisplay[offset] = 0xffffff00;
+                        // TODO colors
+                        colorsToDisplay[offset] = 0xffff0000;
                     else
                         Log.e("PencilDrawTask", "Bad cord, x is " + canvasCords.get(i).x +
                                 " and y is " + canvasCords.get(i).y + " and offset is " + offset);
                 }
+
+                // save picture
+                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
 
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
                 task.setBitmap(toDisplay);
@@ -65,6 +91,9 @@ class PaintWorker implements Runnable {
                     colorsToDisplay[i] = (int) (0x00ffffff * Math.random());
                     colorsToDisplay[i] = colorsToDisplay[i] << 8;
                 }
+
+                // save picture
+                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
 
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, screen.getWidth(), screen.getHeight(), Bitmap.Config.ARGB_8888);
                 task.setBitmap(toDisplay);
@@ -87,6 +116,9 @@ class PaintWorker implements Runnable {
                         }
                     }
                 }
+
+                // save picture
+                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
 
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, screen.getWidth(), screen.getHeight(), Bitmap.Config.ARGB_8888);
                 task.setBitmap(toDisplay);
