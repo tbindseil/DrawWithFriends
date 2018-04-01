@@ -3,7 +3,7 @@
 set -e
 
 # make sure git status is clean
-if [ "$1" -ne "committed" ]; then
+if [ "$1" != "committed" ]; then
     exit
 fi
 
@@ -70,8 +70,32 @@ cat $(find ./ -name MainActivity.java) | sed "/switch (toolSelected) {/a $STR1" 
 mv tmp $(find ./ -name MainActivity.java)
 
 # paint worker handle update message
+STR2="case BitmapUpdateMessage."
+STR2+="$DESCRIPTION_ALL_CAP"
+STR2+="_DRAW: {"
+STR1="break;"
+STR0="}"
+
+cat $(find ./ -name PaintWorker.java) | sed "/switch (task.getTask()) {/a $STR0" |
+        sed "s/$STR0/            &/" |
+        sed "/switch (task.getTask()) {/a $STR1" |
+        sed "s/$STR1/                &/" |
+        sed "/switch (task.getTask()) {/a $STR2" |
+        sed "s/$STR2/            &/" > tmp
+mv tmp $(find ./ -name PaintWorker.java)
 
 # tool selection act
+STR1="return InputTool."
+STR1+="$DESCRIPTION_ALL_CAP"
+STR1+=":"
+STR2="case (R.id."
+STR2+="$DESCRIPTION"
+STR2+="Button);"
+cat $(find ./ -name ToolSelectionActivity.java) | sed "/switch (curr.getId()) {/a $STR1" |
+        sed "s/$STR1/            &/" |
+        sed "/switch (curr.getId()) {/a $STR2" |
+        sed "s/$STR2/            &/" > tmp
+mv tmp $(find ./ -name ToolSelectionActivity.java)
 
 # bitmap update message int
 
