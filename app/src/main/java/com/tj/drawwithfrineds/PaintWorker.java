@@ -65,7 +65,7 @@ class PaintWorker implements Runnable {
                 }
 
                 for (int i = 0; i < canvasCords.size(); i++) {
-                    Log.e("PencilDrawTask", "i is " + i + " x is " + canvasCords.get(i).x + " y is " + canvasCords.get(i).y);
+                    //Log.d("PencilDrawTask", "i is " + i + " x is " + canvasCords.get(i).x + " y is " + canvasCords.get(i).y);
                     int offset = (canvas.getWidth() * canvasCords.get(i).y) + canvasCords.get(i).x;
                     if (offset < colorsToDisplay.length && offset >= 0)
                         // TODO colors

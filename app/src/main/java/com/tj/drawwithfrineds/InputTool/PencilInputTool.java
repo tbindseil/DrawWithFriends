@@ -1,5 +1,6 @@
 package com.tj.drawwithfrineds.InputTool;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 
 public class PencilInputTool extends InputTool {
-    public static final int THICKNESS_1 = 256;
+    public static final int THICKNESS_1 = 128;
     private int thickness;
 
     public PencilInputTool(int thickness) {
@@ -34,17 +35,22 @@ public class PencilInputTool extends InputTool {
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+                update.setThickness(update.getThickness() * 2);
+            case MotionEvent.ACTION_MOVE:
                 int historySize = ev.getHistorySize();
                 List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
                 touchPoints.add(new ScreenCord(ev.getX(), ev.getY()));
-                /*
+
+                // questionably needed?
                 for (int i = 0; i < historySize; i++) {
                     touchPoints.add(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)));
-                }*/
+                }
 
                 update.setCords(touchPoints);
                 return update;
             default:
+                Log.e("PencilInputTool", "action is " + ev.getAction());
                 break;
         }
 

@@ -16,9 +16,9 @@ public class CanvasCord {
     }
 
     public CanvasCord(ScreenCord screenCord, ImageView canvas) {
-        Log.d("CanvasCord", "Incoming screenCord.x is " + screenCord.x + " and screenCord.y is " + screenCord.y);
+        //Log.d("CanvasCord", "Incoming screenCord.x is " + screenCord.x + " and screenCord.y is " + screenCord.y);
         this.x = (int)screenCord.x - (int)canvas.getX();
         this.y = (int)screenCord.y - (int)canvas.getY();
-        Log.d("CanvasCord", "this.x is " + this.x + " and this.y is " + this.y);
+        //Log.d("CanvasCord", "this.x is " + this.x + " and this.y is " + this.y);
     }
 }
