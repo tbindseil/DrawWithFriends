@@ -46,20 +46,19 @@ class PaintWorker implements Runnable {
 
                 // convert touch point to a pixel
                 List<CanvasCord> canvasCords = new ArrayList<CanvasCord>();
-                List<ScreenCord> screenCords = castedTask.getCanvasCords();
+                ScreenCord screenCord = castedTask.getScreenCord();
                 int thickness = castedTask.getThickness();
-                for (int i = 0; i < screenCords.size(); i++) {
-                    canvasCords.add(new CanvasCord(screenCords.get(i), canvas));
-                    int x = canvasCords.get(canvasCords.size() - 1).x;
-                    int y = canvasCords.get(canvasCords.size() - 1).y;
-                    // wow such algo... maybe a hash????
-                    for (int j = 0 ; j < thickness; j++) {
-                        for (int k = 0; k < thickness; k++) {
-                            int currX = x + j;
-                            int currY = y + k;
-                            if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
-                                canvasCords.add(new CanvasCord(currX, currY));
-                            }
+
+                canvasCords.add(new CanvasCord(screenCord, canvas));
+                int x = canvasCords.get(canvasCords.size() - 1).x;
+                int y = canvasCords.get(canvasCords.size() - 1).y;
+                // wow such algo... maybe a hash????
+                for (int j = 0; j < thickness; j++) {
+                    for (int k = 0; k < thickness; k++) {
+                        int currX = x + j;
+                        int currY = y + k;
+                        if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
+                            canvasCords.add(new CanvasCord(currX, currY));
                         }
                     }
                 }
@@ -109,8 +108,7 @@ class PaintWorker implements Runnable {
                         int offset = screen.getWidth() * i + j;
                         if (offset >= 0 && offset < colorsToDisplay.length) {
                             colorsToDisplay[offset] = 0xffffff00;
-                        }
-                        else {
+                        } else {
                             Log.e("PencilDrawTask", "Bad cord, x is " + j +
                                     " and y is " + i + " and offset is " + offset);
                         }

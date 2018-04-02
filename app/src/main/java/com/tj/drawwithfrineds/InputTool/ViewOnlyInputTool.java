@@ -12,7 +12,7 @@ import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
 public class ViewOnlyInputTool extends InputTool {
     @Override
-    public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
+    public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         // TODO handle this better
         return null;
     }

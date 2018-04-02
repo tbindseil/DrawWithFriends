@@ -90,9 +90,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 PaintManager.getInstance();
-                BitmapUpdateMessage update = currInputTool.handleTouch(motionEvent, (ImageView) view);
-                if (update != null)
-                    PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+                BitmapUpdateMessage updates[] = currInputTool.handleTouch(motionEvent, (ImageView) view);
+                if (updates != null) {
+                    for (int i = 0; i < updates.length; i++) {
+                        if (updates[i] != null) {
+                            PaintManager.getInstance().handleState(updates[i], BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+                        }
+                    }
+                }
                 return true;
             }
         });

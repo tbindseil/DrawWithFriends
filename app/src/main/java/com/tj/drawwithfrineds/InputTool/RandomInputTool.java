@@ -13,8 +13,10 @@ import com.tj.drawwithfrineds.UpdateMessage.RandomUpdateMessage;
 
 public class RandomInputTool extends InputTool {
     @Override
-    public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
+    public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas, BitmapUpdateMessage.RANDOM_DRAW);
-        return randomTask;
+        BitmapUpdateMessage[] updates = new BitmapUpdateMessage[1];
+        updates[0] = randomTask;
+        return updates;
     }
 }

@@ -18,5 +18,5 @@ public abstract class InputTool {
     public static final int QUADRANT = 3;
     // End of InputTool Vals
 
-    public abstract BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas);
+    public abstract BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas);
 }

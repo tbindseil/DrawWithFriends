@@ -24,37 +24,53 @@ public class PencilInputTool extends InputTool {
         this.thickness = thickness;
     }
 
+    private boolean pointerIndexDownOrUp(MotionEvent ev, int i) {
+        int action = ev.getAction();
+        int actionPointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+        int actionPointerIndexOfI = ev.getPointerId(i);
+        if (actionPointerIndex == actionPointerIndexOfI) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
-    public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
+    public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         if (ev == null || canvas == null) {
             return null;
         }
 
-        // create bitmap update message
-        PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW, thickness);
-
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_UP:
-                update.setThickness(update.getThickness() * 2);
-            case MotionEvent.ACTION_MOVE:
-                int historySize = ev.getHistorySize();
-                List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
-                touchPoints.add(new ScreenCord(ev.getX(), ev.getY()));
-
-                // questionably needed?
-                for (int i = 0; i < historySize; i++) {
-                    touchPoints.add(new ScreenCord(ev.getHistoricalX(i), ev.getHistoricalY(i)));
-                }
-
-                update.setCords(touchPoints);
-                return update;
-            default:
-                Log.e("PencilInputTool", "action is " + ev.getAction());
-                break;
+        // create bitmap update messages
+        int pointerCount = ev.getPointerCount();
+        PencilUpdateMessage updates[] = new PencilUpdateMessage[pointerCount];
+        for (int i = 0; i < pointerCount; i++) {
+            updates[i] = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW, thickness);
         }
 
-        return null;
+        // TODO checkout addBatch
+
+        // multiple events, one per pointer
+        for (int i = 0; i < pointerCount; i++) {
+            switch (ev.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_POINTER_DOWN:
+                case MotionEvent.ACTION_POINTER_UP:
+                    if (i == ev.getActionIndex()) { //pointerIndexDownOrUp(ev, i)) {
+                        updates[i].setThickness(thickness * 2);
+                    }
+                case MotionEvent.ACTION_MOVE:
+                    ScreenCord touchPoint = new ScreenCord(ev.getX(i), ev.getY(i));
+                    updates[i].setCord(touchPoint);
+                    break;
+                default:
+                    Log.e("PencilInputTool", "action is " + ev.getAction());
+                    updates[i] = null;
+                    break;
+            }
+        }
+        return updates;
     }
 
 /*debug

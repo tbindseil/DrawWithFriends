@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class PencilUpdateMessage extends BitmapUpdateMessage {
-    private List<ScreenCord> screenCords;
+    private ScreenCord screenCord;
     private int thickness;
 
     public PencilUpdateMessage(ImageView paintPad, int task, int thickness) {
@@ -19,12 +19,12 @@ public class PencilUpdateMessage extends BitmapUpdateMessage {
         this.thickness = thickness;
     }
 
-    public void setCords(List<ScreenCord> cords) {
-        this.screenCords = cords;
+    public void setCord(ScreenCord cord) {
+        this.screenCord = cord;
     }
 
-    public List<ScreenCord> getCanvasCords() {
-        return screenCords;
+    public ScreenCord getScreenCord() {
+        return screenCord;
     }
 
     public void setThickness(int thickness) {

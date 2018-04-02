@@ -12,7 +12,9 @@ import com.tj.drawwithfrineds.UpdateMessage.QuadrantUpdateMessage;
 
 public class QuadrantInputTool extends InputTool {
     @Override
-    public BitmapUpdateMessage handleTouch(MotionEvent ev, ImageView canvas) {
-        return new QuadrantUpdateMessage(canvas, BitmapUpdateMessage.QUADRANT_DRAW);
+    public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
+        QuadrantUpdateMessage updates[] = new QuadrantUpdateMessage[1];
+        updates[0] = new QuadrantUpdateMessage(canvas, BitmapUpdateMessage.QUADRANT_DRAW);
+        return updates;
     }
 }
