@@ -1,10 +1,14 @@
 package com.tj.drawwithfrineds.InputTool;
 
+import android.app.Activity;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import com.tj.drawwithfrineds.InputTool.InputTool;
+import com.tj.drawwithfrineds.R;
 import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
@@ -19,6 +23,11 @@ import java.util.List;
 public class PencilInputTool extends InputTool {
     public static final int THICKNESS_1 = 128;
     private int thickness;
+
+    public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
+        /* TODO RadioGroup thicknessGroup = (RadioGroup)toolSelectActRef.findViewById(R.id.thickness_group);
+        thickness = thicknessGroup.getCheckedRadioButtonId();*/
+    }
 
     public PencilInputTool(int thickness) {
         this.thickness = thickness;

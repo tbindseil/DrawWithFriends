@@ -1,15 +1,18 @@
 package com.tj.drawwithfrineds.InputTool;
 
+import android.support.constraint.ConstraintLayout;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
+import java.io.Serializable;
+
 /**
  * Created by TJ on 3/10/2018.
  */
 
-public abstract class InputTool {
+public abstract class InputTool implements Serializable {
 
     // Beginning of InputTool Vals
     public static final int VIEW_ONLY = 0;

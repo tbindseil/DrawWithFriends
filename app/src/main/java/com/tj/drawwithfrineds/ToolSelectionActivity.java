@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,15 +53,19 @@ public class ToolSelectionActivity extends AppCompatActivity {
                             case (R.id.viewOnlyButton):
                                 findViewById(R.id.viewonly_configuration).setVisibility(visibility);
                                 selectedInput = InputTool.VIEW_ONLY;
+                                break;
                             case (R.id.pencilButton):
                                 findViewById(R.id.pencil_configuration).setVisibility(visibility);
                                 selectedInput = InputTool.PENCIL;
+                                break;
                             case (R.id.randomButton):
                                 findViewById(R.id.random_configuration).setVisibility(visibility);
                                 selectedInput = InputTool.RANDOM;
+                                break;
                             case (R.id.quadrantButton):
                                 findViewById(R.id.quadrant_configuration).setVisibility(visibility);
                                 selectedInput = InputTool.QUADRANT;
+                                break;
                             default:
                                 break;
                         }
@@ -80,6 +85,33 @@ public class ToolSelectionActivity extends AppCompatActivity {
         return true;
     }
 
+    private void loadConfiguredTool(Intent intent) {
+        switch (selectedInput) {
+            case InputTool.VIEW_ONLY: {
+                ViewOnlyInputTool tool = new ViewOnlyInputTool((ConstraintLayout) findViewById(R.id.viewonly_configuration), this);
+                intent.putExtra(getString(R.string.tool_type_viewonly), tool);
+                break;
+            }
+            case InputTool.PENCIL: {
+                PencilInputTool tool = new PencilInputTool((ConstraintLayout) findViewById(R.id.viewonly_configuration), this);
+                intent.putExtra(getString(R.string.tool_type_pencil), tool);
+                break;
+            }
+            case InputTool.RANDOM: {
+                RandomInputTool tool = new RandomInputTool((ConstraintLayout) findViewById(R.id.viewonly_configuration), this);
+                intent.putExtra(getString(R.string.tool_type_random), tool);
+                break;
+            }
+            case InputTool.QUADRANT: {
+                QuadrantInputTool tool = new QuadrantInputTool((ConstraintLayout) findViewById(R.id.viewonly_configuration), this);
+                intent.putExtra(getString(R.string.tool_type_quadrant), tool);
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
     @Override
     // clear all other options
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,6 +122,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 break;
             case R.id.action_save:
                 intent.putExtra(getString(R.string.tool_select_intent), selectedInput);
+                loadConfiguredTool(intent);
                 startActivity(intent);
                 break;
             default:

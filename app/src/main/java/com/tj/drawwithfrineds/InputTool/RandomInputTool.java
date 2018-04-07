@@ -1,5 +1,7 @@
 package com.tj.drawwithfrineds.InputTool;
 
+import android.app.Activity;
+import android.support.constraint.ConstraintLayout;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -12,6 +14,10 @@ import com.tj.drawwithfrineds.UpdateMessage.RandomUpdateMessage;
  */
 
 public class RandomInputTool extends InputTool {
+    public RandomInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
+
+    }
+
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas, BitmapUpdateMessage.RANDOM_DRAW);

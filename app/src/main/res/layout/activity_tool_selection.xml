@@ -91,6 +91,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/pencilTitle"
             android:layout_width="match_parent"
@@ -101,6 +102,35 @@
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/thickness_group"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="104dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/thinButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thin" />
+
+            <RadioButton
+                android:id="@+id/mediumButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium" />
+
+            <RadioButton
+                android:id="@+id/thickButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thick" />
+        </RadioGroup>
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
