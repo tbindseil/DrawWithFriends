@@ -12,8 +12,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.tj.drawwithfrineds.InputTool.InputTool;
+import com.tj.drawwithfrineds.InputTool.PencilInputTool;
+import com.tj.drawwithfrineds.InputTool.QuadrantInputTool;
+import com.tj.drawwithfrineds.InputTool.RandomInputTool;
+import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 
 public class ToolSelectionActivity extends AppCompatActivity {
+    private int selectedInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,40 @@ public class ToolSelectionActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        // set up radiogroup change handler
+        RadioGroup toolOptions = findViewById(R.id.toolSelectGroup);
+        toolOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup tools, int buttonId) {
+
+                for (int i = 0; i < tools.getChildCount(); i++) {
+                    View curr = tools.getChildAt(i);
+                    if (curr instanceof RadioButton) {
+                        int visibility = View.INVISIBLE;
+                        if (((RadioButton) curr).isChecked()) {
+                            visibility = View.VISIBLE;
+                        }
+                        switch (curr.getId()) {
+                            case (R.id.viewOnlyButton):
+                                findViewById(R.id.viewonly_configuration).setVisibility(visibility);
+                                selectedInput = InputTool.VIEW_ONLY;
+                            case (R.id.pencilButton):
+                                findViewById(R.id.pencil_configuration).setVisibility(visibility);
+                                selectedInput = InputTool.PENCIL;
+                            case (R.id.randomButton):
+                                findViewById(R.id.random_configuration).setVisibility(visibility);
+                                selectedInput = InputTool.RANDOM;
+                            case (R.id.quadrantButton):
+                                findViewById(R.id.quadrant_configuration).setVisibility(visibility);
+                                selectedInput = InputTool.QUADRANT;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -41,38 +80,6 @@ public class ToolSelectionActivity extends AppCompatActivity {
         return true;
     }
 
-    // start of tool bar handler code
-    public int saveCurrentTool() {
-        RadioGroup tools = (RadioGroup)findViewById(R.id.toolSelectGroup);
-
-        for (int i = 0; i < tools.getChildCount(); i++) {
-            View curr = tools.getChildAt(i);
-            if (curr instanceof RadioButton) {
-                if (((RadioButton) curr).isChecked()){
-                    switch (curr.getId()) {
-                        case (R.id.viewOnlyButton):
-                            return InputTool.VIEW_ONLY;
-                        case (R.id.pencilButton):
-                            return InputTool.PENCIL;
-                        case (R.id.randomButton):
-                            return InputTool.RANDOM;
-                        case (R.id.quadrantButton):
-                            return InputTool.QUADRANT;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
-        return InputTool.VIEW_ONLY;
-    }
-
-    public void returnToMainActivity() {
-        Intent intent = new Intent(ToolSelectionActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     // clear all other options
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -82,7 +89,6 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.action_save:
-                int selectedInput = saveCurrentTool();
                 intent.putExtra(getString(R.string.tool_select_intent), selectedInput);
                 startActivity(intent);
                 break;

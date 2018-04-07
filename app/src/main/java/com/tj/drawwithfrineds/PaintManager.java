@@ -46,6 +46,7 @@ public class PaintManager {
         mHanler  = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message message) {
+                // TODO switch on state
                 BitmapUpdateMessage update = (BitmapUpdateMessage)message.obj;
                 Bitmap toDraw = update.getBitmap();
                 update.getImageView().setImageBitmap(toDraw);

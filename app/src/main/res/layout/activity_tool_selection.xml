@@ -13,43 +13,136 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
-    <RadioGroup
-        android:id="@+id/toolSelectGroup"
+    <ScrollView
         android:layout_width="368dp"
-        android:layout_height="378dp"
+        android:layout_height="67dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
-        android:orientation="vertical"
+        android:layout_marginTop="56dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RadioButton
-            android:id="@+id/viewOnlyButton"
+        <RadioGroup
+            android:id="@+id/toolSelectGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Only" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <RadioButton
-            android:id="@+id/pencilButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pencil" />
+            <RadioButton
+                android:id="@+id/viewOnlyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Only" />
 
-        <RadioButton
-            android:id="@+id/randomButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Random" />
+            <RadioButton
+                android:id="@+id/pencilButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pencil" />
 
-        <RadioButton
-            android:id="@+id/quadrantButton"
+            <RadioButton
+                android:id="@+id/randomButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Random" />
+
+            <RadioButton
+                android:id="@+id/quadrantButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quadrant" />
+            <!-- End Tool Radio Buttons -->
+        </RadioGroup>
+    </ScrollView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/viewonly_configuration"
+        android:layout_width="368dp"
+        android:layout_height="432dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="132dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/viewOnlyTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Quadrant" />
-        <!-- End Tool Radio Buttons -->
-    </RadioGroup>
+            android:layout_height="90dp"
+            android:text="View Only"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/pencil_configuration"
+        android:layout_width="368dp"
+        android:layout_height="432dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="132dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/pencilTitle"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Pencil"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/random_configuration"
+        android:layout_width="368dp"
+        android:layout_height="432dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="132dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/randomTitle"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Random"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/quadrant_configuration"
+        android:layout_width="368dp"
+        android:layout_height="432dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="132dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/quadrantTitle"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Quadrant"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
