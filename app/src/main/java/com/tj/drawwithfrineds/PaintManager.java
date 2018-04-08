@@ -80,7 +80,7 @@ public class PaintManager {
             currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
             for (int i = 0; i < currPicture.length; i++) {
                 currPicture[i] = (int) (0x00ffffff * Math.random());
-                currPicture[i] = currPicture[i] << 8;
+                currPicture[i] = currPicture[i] | 0xff000000;
             }
         }
         return currPicture;

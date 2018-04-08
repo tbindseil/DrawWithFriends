@@ -88,7 +88,7 @@ class PaintWorker implements Runnable {
                 int[] colorsToDisplay = new int[screen.getWidth() * screen.getHeight()];
                 for (int i = 0; i < colorsToDisplay.length; i++) {
                     colorsToDisplay[i] = (int) (0x00ffffff * Math.random());
-                    colorsToDisplay[i] = colorsToDisplay[i] << 8;
+                    colorsToDisplay[i] = colorsToDisplay[i] | 0xff000000;
                 }
 
                 // save picture
