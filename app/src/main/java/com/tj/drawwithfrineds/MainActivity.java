@@ -66,21 +66,21 @@ public class MainActivity extends AppCompatActivity {
         switch (toolSelected) {
             case InputTool.PENCIL:
                 toolSelectButton.setText(getString(R.string.pencil_tool));
-                currInputTool = (InputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
+                currInputTool = (PencilInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_pencil));
                 break;
             case InputTool.RANDOM:
                 // TODO put these in r/strings
                 toolSelectButton.setText("Random");
-                currInputTool = (InputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
+                currInputTool = (RandomInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
                 break;
             case InputTool.QUADRANT:
                 toolSelectButton.setText("Quadrant");
-                currInputTool = (InputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
+                currInputTool = (QuadrantInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_quadrant));
                 break;
             case InputTool.VIEW_ONLY:
             default:
                 toolSelectButton.setText(getString(R.string.view_only_tool));
-                currInputTool = (InputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
+                currInputTool = (ViewOnlyInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_viewonly));
                 break;
         }
 
