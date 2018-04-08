@@ -26,22 +26,17 @@ class PaintWorker implements Runnable {
         // Moves the current Thread into the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DEFAULT);
 
+        ImageView canvas = task.getImageView();
+        int[] colorsToDisplay;
+        if (task.getTask() == BitmapUpdateMessage.INIT_DRAW) {
+            colorsToDisplay = PaintManager.getInstance().initCurrPicture(canvas);
+        }
+        else {
+            colorsToDisplay = PaintManager.getInstance().getCurrPicture();
+        }
+        
         switch (task.getTask()) {
-            case BitmapUpdateMessage.INIT_DRAW: {
-                // TODO racecase
-                ImageView canvas = task.getImageView();
-
-                int[] colorsToDisplay = PaintManager.getInstance().initCurrPicture(canvas);
-                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-                task.setBitmap(toDisplay);
-                task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
-                break;
-            }
             case BitmapUpdateMessage.PENCIL_DRAW: {
-
-                ImageView canvas = task.getImageView();
-
-                int colorsToDisplay[] = PaintManager.getInstance().getCurrPicture();
                 PencilUpdateMessage castedTask = (PencilUpdateMessage) task;
 
                 // convert touch point to a pixel
@@ -73,39 +68,19 @@ class PaintWorker implements Runnable {
                         Log.e("PencilDrawTask", "Bad cord, x is " + canvasCords.get(i).x +
                                 " and y is " + canvasCords.get(i).y + " and offset is " + offset);
                 }
-
-                // save picture
-                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
-
-                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-                task.setBitmap(toDisplay);
-                task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
                 break;
             }
             case BitmapUpdateMessage.RANDOM_DRAW: {
-                ImageView screen = task.getImageView();
-
-                int[] colorsToDisplay = new int[screen.getWidth() * screen.getHeight()];
                 for (int i = 0; i < colorsToDisplay.length; i++) {
                     colorsToDisplay[i] = (int) (0x00ffffff * Math.random());
                     colorsToDisplay[i] = colorsToDisplay[i] | 0xff000000;
                 }
-
-                // save picture
-                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
-
-                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, screen.getWidth(), screen.getHeight(), Bitmap.Config.ARGB_8888);
-                task.setBitmap(toDisplay);
-                task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
                 break;
             }
             case BitmapUpdateMessage.QUADRANT_DRAW: {
-                ImageView screen = task.getImageView();
-
-                int[] colorsToDisplay = PaintManager.getInstance().getCurrPicture();
-                for (int i = 0; i < screen.getHeight() / 2; i++) {
-                    for (int j = 0; j < screen.getWidth() / 2; j++) {
-                        int offset = screen.getWidth() * i + j;
+                for (int i = 0; i < canvas.getHeight() / 2; i++) {
+                    for (int j = 0; j < canvas.getWidth() / 2; j++) {
+                        int offset = canvas.getWidth() * i + j;
                         if (offset >= 0 && offset < colorsToDisplay.length) {
                             colorsToDisplay[offset] = 0xffffff00;
                         } else {
@@ -114,17 +89,17 @@ class PaintWorker implements Runnable {
                         }
                     }
                 }
-
-                // save picture
-                PaintManager.getInstance().setCurrPicture(colorsToDisplay);
-
-                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, screen.getWidth(), screen.getHeight(), Bitmap.Config.ARGB_8888);
-                task.setBitmap(toDisplay);
-                task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
                 break;
             }
+            case BitmapUpdateMessage.INIT_DRAW:
             default:
                 break;
         }
+        // save picture
+        PaintManager.getInstance().setCurrPicture(colorsToDisplay);
+
+        Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        task.setBitmap(toDisplay);
+        task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
     }
 }
