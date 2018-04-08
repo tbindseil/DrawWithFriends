@@ -21,26 +21,27 @@ import java.util.List;
  */
 
 public class PencilInputTool extends InputTool {
-    public static final int THICKNESS_1 = 128;
+    public static final int THICKNESS_THIN = 32;
+    public static final int THICKNESS_MEDIUM = 64;
+    public static final int THICKNESS_THICK = 128;
     private int thickness;
 
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
-        /* TODO RadioGroup thicknessGroup = (RadioGroup)toolSelectActRef.findViewById(R.id.thickness_group);
-        thickness = thicknessGroup.getCheckedRadioButtonId();*/
-    }
-
-    public PencilInputTool(int thickness) {
-        this.thickness = thickness;
-    }
-
-    private boolean pointerIndexDownOrUp(MotionEvent ev, int i) {
-        int action = ev.getAction();
-        int actionPointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-        int actionPointerIndexOfI = ev.getPointerId(i);
-        if (actionPointerIndex == actionPointerIndexOfI) {
-            return true;
-        } else {
-            return false;
+        RadioGroup thicknessGroup = (RadioGroup)toolSelectActRef.findViewById(R.id.thickness_group);
+        int thicknessChecked = thicknessGroup.getCheckedRadioButtonId();
+        switch (thicknessChecked) {
+            case R.id.thinButton:
+                thickness = THICKNESS_THIN;
+                break;
+            case R.id.mediumButton:
+                thickness = THICKNESS_MEDIUM;
+                break;
+            case R.id.thickButton:
+                thickness = THICKNESS_THICK;
+                break;
+            default:
+                thickness = THICKNESS_MEDIUM;
+                break;
         }
     }
 
