@@ -48,8 +48,9 @@ class PaintWorker implements Runnable {
                 int x = canvasCords.get(canvasCords.size() - 1).x;
                 int y = canvasCords.get(canvasCords.size() - 1).y;
                 // wow such algo... maybe a hash????
-                for (int j = 0; j < thickness; j++) {
-                    for (int k = 0; k < thickness; k++) {
+                thickness = thickness / 2;
+                for (int j = 0 - thickness; j < thickness; j++) {
+                    for (int k = 0 - thickness; k < thickness; k++) {
                         int currX = x + j;
                         int currY = y + k;
                         if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
