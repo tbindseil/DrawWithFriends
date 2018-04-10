@@ -61,13 +61,13 @@ public class PaintManager {
         switch (state) {
             case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
                 updateCount++;
-                Log.e("PaintManager", "updateCount is " + updateCount);
+                //Log.e("PaintManager", "updateCount is " + updateCount);
                 Message updateMessage = mHanler.obtainMessage(state, update);
                 updateMessage.sendToTarget();
                 break;
             case BitmapUpdateMessage.BITMAP_UPDATE_REQUEST:
                 requestCount++;
-                Log.e("PaintManager", "requestCount is " + requestCount);
+                //Log.e("PaintManager", "requestCount is " + requestCount);
                 threadControl.execute(new PaintWorker(update));
                 break;
             default:

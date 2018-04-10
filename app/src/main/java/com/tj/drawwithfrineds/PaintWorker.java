@@ -41,20 +41,22 @@ class PaintWorker implements Runnable {
 
                 // convert touch point to a pixel
                 List<CanvasCord> canvasCords = new ArrayList<CanvasCord>();
-                ScreenCord screenCord = castedTask.getScreenCord();
+                List<ScreenCord> screenCords = castedTask.getScreenCords();
                 int thickness = castedTask.getThickness();
 
-                canvasCords.add(new CanvasCord(screenCord, canvas));
-                int x = canvasCords.get(canvasCords.size() - 1).x;
-                int y = canvasCords.get(canvasCords.size() - 1).y;
-                // wow such algo... maybe a hash????
-                thickness = thickness / 2;
-                for (int j = 0 - thickness; j < thickness; j++) {
-                    for (int k = 0 - thickness; k < thickness; k++) {
-                        int currX = x + j;
-                        int currY = y + k;
-                        if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
-                            canvasCords.add(new CanvasCord(currX, currY));
+                for (int i = 0; i < screenCords.size(); i++) {
+                    canvasCords.add(new CanvasCord(screenCords.get(i), canvas));
+                    int x = canvasCords.get(canvasCords.size() - 1).x;
+                    int y = canvasCords.get(canvasCords.size() - 1).y;
+                    // wow such algo... maybe a hash????
+                    thickness = thickness / 2;
+                    for (int j = 0 - thickness; j < thickness; j++) {
+                        for (int k = 0 - thickness; k < thickness; k++) {
+                            int currX = x + j;
+                            int currY = y + k;
+                            if (currX < canvas.getWidth() && currY < canvas.getHeight()) {
+                                canvasCords.add(new CanvasCord(currX, currY));
+                            }
                         }
                     }
                 }

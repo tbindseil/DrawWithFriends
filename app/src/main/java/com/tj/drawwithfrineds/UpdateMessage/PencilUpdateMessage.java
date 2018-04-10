@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.ScreenCord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,20 +12,21 @@ import java.util.List;
  */
 
 public class PencilUpdateMessage extends BitmapUpdateMessage {
-    private ScreenCord screenCord;
+    private List<ScreenCord> screenCords;
     private int thickness;
 
     public PencilUpdateMessage(ImageView paintPad, int task, int thickness) {
         super(paintPad, task);
         this.thickness = thickness;
+        screenCords = new ArrayList<ScreenCord>();
     }
 
-    public void setCord(ScreenCord cord) {
-        this.screenCord = cord;
+    public void setCords(List<ScreenCord> cords) {
+        this.screenCords = cords;
     }
 
-    public ScreenCord getScreenCord() {
-        return screenCord;
+    public List<ScreenCord> getScreenCords() {
+        return screenCords;
     }
 
     public void setThickness(int thickness) {

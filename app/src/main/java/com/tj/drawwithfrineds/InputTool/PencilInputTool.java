@@ -76,8 +76,13 @@ public class PencilInputTool extends InputTool {
                         updates[i].setThickness(thickness * 2);
                     }
                 case MotionEvent.ACTION_MOVE:
-                    ScreenCord touchPoint = new ScreenCord(ev.getX(i), ev.getY(i));
-                    updates[i].setCord(touchPoint);
+                    List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
+                    touchPoints.add(new ScreenCord(ev.getX(i), ev.getY(i)));
+                    for (int j = 0; j < ev.getHistorySize(); j++) {
+                        touchPoints.add(new ScreenCord(ev.getHistoricalX(i, j), ev.getHistoricalY(i, j)));
+                    }
+                    updates[i].setCords(touchPoints);
+                    Log.e("PencilInputTool", "i is " + i + " and touchPoints.size() is " + touchPoints.size() + " and action is " + ev.getActionMasked());
                     break;
                 default:
                     Log.e("PencilInputTool", "action is " + ev.getAction());
@@ -87,24 +92,4 @@ public class PencilInputTool extends InputTool {
         }
         return updates;
     }
-
-/*debug
-    private BitmapUpdateMessage getTUpdate(ImageView canvas) {
-        int xCords[] = new int[canvas.getHeight() + canvas.getWidth()];
-        int yCords[] = new int[canvas.getHeight() + canvas.getWidth()];
-
-        for (int i = 0; i < xCords.length; i++) {
-            if (i < canvas.getWidth()) {
-                yCords[i] = canvas.getHeight() / 2;
-                xCords[i] = i;
-            }
-            else {
-                yCords[i] = i - canvas.getWidth();
-                xCords[i] = canvas.getWidth() / 2;
-            }
-        }
-        PencilUpdateMessage update = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW);
-        update.setCords(xCords, yCords);
-        return update;
-    }*/
 }
