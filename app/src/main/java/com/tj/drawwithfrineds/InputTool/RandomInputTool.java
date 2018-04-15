@@ -20,9 +20,14 @@ public class RandomInputTool extends InputTool {
 
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
-        BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas, BitmapUpdateMessage.RANDOM_DRAW);
-        BitmapUpdateMessage[] updates = new BitmapUpdateMessage[1];
-        updates[0] = randomTask;
-        return updates;
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas, BitmapUpdateMessage.RANDOM_DRAW);
+            BitmapUpdateMessage[] updates = new BitmapUpdateMessage[1];
+            updates[0] = randomTask;
+            return updates;
+        }
+        else {
+            return null;
+        }
     }
 }

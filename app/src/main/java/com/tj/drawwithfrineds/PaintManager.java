@@ -1,5 +1,6 @@
 package com.tj.drawwithfrineds;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,7 +18,7 @@ import java.util.concurrent.Executors;
  */
 
 // ideas, different threads for different sections of pic?
-
+@TargetApi(22)
 public class PaintManager {
     private int requestCount;
     private int updateCount;
@@ -53,7 +54,7 @@ public class PaintManager {
             }
         };
 
-        threadControl = Executors.newFixedThreadPool(1);
+        threadControl = Executors.newWorkStealingPool();
     }
 
     public void handleState(BitmapUpdateMessage update, int state) {
