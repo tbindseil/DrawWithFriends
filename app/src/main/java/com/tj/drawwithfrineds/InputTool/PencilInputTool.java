@@ -26,6 +26,8 @@ public class PencilInputTool extends InputTool {
     public static final int THICKNESS_THICK = 128;
     private int thickness;
 
+    private List<ScreenCord> lastPoints;
+
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
         RadioGroup thicknessGroup = (RadioGroup)toolSelectActRef.findViewById(R.id.thickness_group);
         int thicknessChecked = thicknessGroup.getCheckedRadioButtonId();
@@ -43,6 +45,8 @@ public class PencilInputTool extends InputTool {
                 thickness = THICKNESS_MEDIUM;
                 break;
         }
+
+        lastPoints = new ArrayList<ScreenCord>();
     }
 
     @Override
@@ -68,6 +72,7 @@ public class PencilInputTool extends InputTool {
                 case MotionEvent.ACTION_POINTER_DOWN:
                 case MotionEvent.ACTION_POINTER_UP:
                     if (i == ev.getActionIndex()) { //pointerIndexDownOrUp(ev, i)) {
+                        Log.e("tag", "i is " + i);
                         updates[i].setThickness(thickness * 2);
                     }
                 case MotionEvent.ACTION_MOVE:

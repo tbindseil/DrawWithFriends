@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
  */
 
 // ideas, different threads for different sections of pic?
-@TargetApi(22)
+@TargetApi(24)
 public class PaintManager {
     private int requestCount;
     private int updateCount;
