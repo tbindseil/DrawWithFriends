@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +21,14 @@ import com.tj.drawwithfrineds.InputTool.RandomInputTool;
 import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.InitUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -122,3 +126,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+/*
+View canvas = findViewById(R.id.canvas);
+        PencilUpdateMessage test = new PencilUpdateMessage((ImageView) canvas, BitmapUpdateMessage.PENCIL_DRAW, 32);
+        List<ScreenCord> testt = new ArrayList<ScreenCord>();
+        testt.add(new ScreenCord((float)100.0, (float)100.0));
+        testt.add(new ScreenCord((float)100.0, (float)300.0));
+        test.setCords(testt);
+        PaintManager.getInstance().handleState(test, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+ */

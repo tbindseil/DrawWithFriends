@@ -68,24 +68,39 @@ public class PencilInputTool extends InputTool {
         for (int i = 0; i < pointerCount; i++) {
             switch (ev.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_DOWN:
+                    if (i == ev.getActionIndex()) {
+                        // save last point
+                        if (i < lastPoints.size()) {
+                            lastPoints.get(i).x = ev.getX(i);
+                            lastPoints.get(i).y = ev.getY(i);
+                        }
+                        else if (i == lastPoints.size()){
+                            lastPoints.add(new ScreenCord(ev.getX(i), ev.getY(i)));
+                        }
+                        else {
+                            Log.e("PencilInputTool", "pointer down order error!");
+                        }
+                    }
+                case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
                     if (i == ev.getActionIndex()) { //pointerIndexDownOrUp(ev, i)) {
-                        Log.e("tag", "i is " + i);
-                        updates[i].setThickness(thickness * 2);
+                        //Log.e("tag", "i is " + i);
+                        //updates[i].setThickness(thickness * 2);
                     }
                 case MotionEvent.ACTION_MOVE:
                     List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
                     touchPoints.add(new ScreenCord(ev.getX(i), ev.getY(i)));
-                    for (int j = 0; j < ev.getHistorySize(); j++) {
-                        touchPoints.add(new ScreenCord(ev.getHistoricalX(i, j), ev.getHistoricalY(i, j)));
-                    }
+                    touchPoints.add(lastPoints.get(i));
+                    ScreenCord updateLastPoint = new ScreenCord(ev.getX(i), ev.getY(i));
+                    lastPoints.set(i, updateLastPoint);
+                    //lastPoints.get(i).x = ev.getX(i);// touchPoints.get(0).x;
+                    //lastPoints.get(i).y = ev.getY(i);//touchPoints.get(0).y;
                     updates[i].setCords(touchPoints);
-                    Log.e("PencilInputTool", "i is " + i + " and touchPoints.size() is " + touchPoints.size() + " and action is " + ev.getActionMasked());
+                    //Log.e("PencilInputTool", "i is " + i + " and touchPoints.size() is " + touchPoints.size() + " and action is " + ev.getActionMasked());
                     break;
                 default:
-                    Log.e("PencilInputTool", "action is " + ev.getAction());
+                    //Log.e("PencilInputTool", "action is " + ev.getAction());
                     updates[i] = null;
                     break;
             }
