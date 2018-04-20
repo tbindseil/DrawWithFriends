@@ -48,7 +48,7 @@ public class PencilInputTool extends InputTool {
 
         lastPoints = new ArrayList<ScreenCord>();
     }
-
+// TODO synchronize touchdown/up first square, pretty much only time when multiple access is possible
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         if (ev == null || canvas == null) {

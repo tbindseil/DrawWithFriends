@@ -21,4 +21,12 @@ public class CanvasCord {
         this.y = (int)screenCord.y;
         //Log.d("CanvasCord", "this.x is " + this.x + " and this.y is " + this.y);
     }
+
+    public double distanceSquaredFrom(CanvasCord otherCord) {
+        return Math.pow(otherCord.x - x, 2) +Math.pow(otherCord.y - y, 2);
+    }
+
+    public boolean equals(CanvasCord otherCord) {
+        return (otherCord.x == x && otherCord.y == y) ? true : false;
+    }
 }

@@ -10,8 +10,13 @@ import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by TJ on 2/25/2018.
@@ -27,8 +32,8 @@ public class PaintManager {
     private int[] currPicture;
 
     private Handler mHanler;
-    private ExecutorService threadControl;
-
+    private ForkJoinPool threadControl;
+    private BlockingQueue<Runnable> workQueue;
     // TODO instance should not require an imageview
     public static PaintManager getInstance() {
         if (instance == null) {
@@ -54,7 +59,9 @@ public class PaintManager {
             }
         };
 
-        threadControl = Executors.newWorkStealingPool();
+        workQueue = new LinkedBlockingDeque<>();
+        threadControl = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true);
+        //new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors(), 60, TimeUnit.SECONDS, workQueue);
     }
 
     public void handleState(BitmapUpdateMessage update, int state) {
@@ -87,7 +94,7 @@ public class PaintManager {
         return currPicture;
     }
 
-    public int[] getCurrPicture() {
+    public synchronized int[] getCurrPicture() {
         return currPicture;
     }
 

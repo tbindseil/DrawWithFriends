@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case InputTool.VIEW_ONLY:
             default:
+                // TODO
                 toolSelectButton.setText(getString(R.string.view_only_tool));
                 currInputTool = (ViewOnlyInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_viewonly));
                 break;
