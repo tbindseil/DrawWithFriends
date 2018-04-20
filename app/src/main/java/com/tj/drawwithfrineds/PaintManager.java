@@ -30,6 +30,7 @@ public class PaintManager {
     private static PaintManager instance;
 
     private int[] currPicture;
+    private int stepMagnitude;
 
     private Handler mHanler;
     private ForkJoinPool threadControl;
@@ -59,6 +60,7 @@ public class PaintManager {
             }
         };
 
+        stepMagnitude = 1;
         workQueue = new LinkedBlockingDeque<>();
         threadControl = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true);
         //new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors(), 60, TimeUnit.SECONDS, workQueue);
@@ -99,4 +101,6 @@ public class PaintManager {
     }
 
     public void setCurrPicture(int[] picture) {currPicture = picture;}
+
+    public int getStepMagnitude() { return stepMagnitude; }
 }

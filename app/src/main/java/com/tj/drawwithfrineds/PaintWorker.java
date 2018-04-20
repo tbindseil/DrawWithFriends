@@ -28,8 +28,13 @@ class PaintWorker implements Runnable {
         // check (c1.x, c1.y + 1) vs (c1.x + 1, c1.y)
         // whichever is closer to c2 is the new c1 and gets added to toRet
         Log.e("recursive", "c1.x, y is " + c1.x + ", " + c1.y + " and c2.x y is " + c2.x + ", " + c2.y);
-        int xStep = (c1.x < c2.x) ? 1 : -1;
-        int yStep = (c1.y < c2.y) ? 1 : -1;
+        int stepMagnitude = PaintManager.getInstance().getStepMagnitude();
+        int xStep = (c1.x < c2.x) ? stepMagnitude : 0 - stepMagnitude;
+        int yStep = (c1.y < c2.y) ? stepMagnitude : 0 - stepMagnitude;
+
+        double c2DistFromOrigin = c2.distanceSquaredFromOrigin();
+        boolean lessThanLater = c1.distanceSquaredFromOrigin() < c2DistFromOrigin ?
+                false : true;
 
         CanvasCord last = c1;
         CanvasCord opt1;
@@ -38,18 +43,28 @@ class PaintWorker implements Runnable {
             opt1 = new CanvasCord(last.x, last.y + yStep);
             opt2 = new CanvasCord(last.x + xStep, last.y);
 
+            if (lessThanLater) {
+                if (opt1.distanceSquaredFromOrigin() < c2DistFromOrigin || opt2.distanceSquaredFromOrigin() < c2DistFromOrigin) {
+                    break;
+                }
+            } else {
+                if (opt1.distanceSquaredFromOrigin() > c2DistFromOrigin || opt2.distanceSquaredFromOrigin() > c2DistFromOrigin) {
+                    break;
+                }
+            }
+
             double dist1 = opt1.distanceSquaredFrom(c2);
             double dist2 = opt2.distanceSquaredFrom(c2);
 
             if (dist1 < dist2) {
                 last = opt1;
-            }
-            else {
+            } else {
                 last = opt2;
             }
 
             toRet.add(last);
-        } while (!opt1.equals(c2) && !opt2.equals(c2));
+        } while (true);
+            //} while (!opt1.equals(c2) && !opt2.equals(c2));
         Log.e("recursive", "points in this message is " + toRet.size());
     }
 
@@ -96,7 +111,7 @@ class PaintWorker implements Runnable {
                 if (canvasCords.size() == 2) {
                     Log.e("PaintWorker", "cord0.x,y is " + canvasCords.get(0).x + ", " + canvasCords.get(0).y);
                     Log.e("PaintWorker", "cord1.x,y is " + canvasCords.get(1).x + ", " + canvasCords.get(1).y);
-                    //connectTheDots/*Recursive*/(canvasCords.get(0), canvasCords.get(1), canvasCords);
+                    connectTheDots/*Recursive*/(canvasCords.get(0), canvasCords.get(1), canvasCords);
                 }
                 else {
                     Log.e("PaintWorker","canvascords.size is off");
