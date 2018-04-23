@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.InputTool.PencilInputTool;
@@ -119,6 +121,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_clear:
+                Toast.makeText(this, "here", Toast.LENGTH_LONG).show();;
+                break;
+            case R.id.action_set:
+                Toast.makeText(this, "herep", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
         return true;
     }
 
