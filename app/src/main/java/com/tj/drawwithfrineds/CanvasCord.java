@@ -27,7 +27,7 @@ public class CanvasCord {
     }
 
     public double distanceSquaredFromOrigin() {
-        return Math.pow(x, 2) +Math.pow(y, 2);
+        return Math.pow(x, 2) + Math.pow(y, 2);
     }
     public boolean equals(CanvasCord otherCord) {
         return (otherCord.x == x && otherCord.y == y) ? true : false;
