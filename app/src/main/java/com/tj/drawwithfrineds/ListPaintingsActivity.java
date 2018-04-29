@@ -26,6 +26,9 @@ public class ListPaintingsActivity extends AppCompatActivity {
             try {
                 in = new BufferedReader(new FileReader(allProjects[i]));
                 String currProjectTitle = in.readLine();
+                if (currProjectTitle.endsWith("localpic")) {
+                    continue;
+                }
                 TextView curr = new TextView(this.getApplicationContext());
                 curr.setText(currProjectTitle);
                 ll.addView(curr);

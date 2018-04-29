@@ -15,13 +15,16 @@ public abstract class BitmapUpdateMessage {
 
     // status
     public static final int BITMAP_RENDER_COMPLETE = 1;
-    public static final int BITMAP_UPDATE_REQUEST = 2;
+    public static final int BITMAP_SAVE_COMPLETE = 2;
+    public static final int BITMAP_UPDATE_REQUEST = 3;
+    public static final int BITMAP_SAVE_REQUEST = 4;
 
     // Beginning of BitmapUpdateMessage Vals
     public static final int INIT_DRAW = 0;
     public static final int PENCIL_DRAW = 1;
     public static final int RANDOM_DRAW = 2;
     public static final int QUADRANT_DRAW = 3;
+    public static final int SAVE_DRAW = 4;
     // End of BitmapUpdateMessage Vals
 
     // TODO do this better
@@ -50,6 +53,7 @@ public abstract class BitmapUpdateMessage {
     public void handleUpdateState(int state) {
         switch (state) {
             case BITMAP_RENDER_COMPLETE:
+            case BITMAP_SAVE_COMPLETE:
                 PaintManager.getInstance().handleState(this, state);
                 break;
             default:

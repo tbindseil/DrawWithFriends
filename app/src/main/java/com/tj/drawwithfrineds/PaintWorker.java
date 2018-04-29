@@ -1,5 +1,6 @@
 package com.tj.drawwithfrineds;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
@@ -8,6 +9,8 @@ import android.widget.LinearLayout;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,6 +168,20 @@ class PaintWorker implements Runnable {
                 }
                 break;
             }
+            case BitmapUpdateMessage.SAVE_DRAW:
+                Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+                FileOutputStream out = null;
+                try {
+                    Log.e("SAVE_DRAW", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
+                    PaintManager.getInstance().getFile().createNewFile();
+                    out = new FileOutputStream(PaintManager.getInstance().getFile());
+                    toDisplay.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.close();
+                } catch (Exception e) {
+                    Log.e("SAVE_DRAW", "caught exception while saving " + e.getMessage());
+                }
+                task.handleUpdateState(BitmapUpdateMessage.BITMAP_SAVE_COMPLETE);
+                return;
             case BitmapUpdateMessage.INIT_DRAW:
             default:
                 break;

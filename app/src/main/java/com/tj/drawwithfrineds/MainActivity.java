@@ -24,6 +24,8 @@ import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.InitUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.QuadrantUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.SaveUpdateMessage;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private InputTool currInputTool;
 
     private int[] currPicture = null;
+    private String paintingTitle;
+
+    public String getPaintingTitle() { return paintingTitle; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String paintingFileName = getIntent().getStringExtra(getString(R.string.painting_to_load));
-        String paintingTitle = "";
+        if (paintingFileName != null) {
+            PaintManager.getInstance().setFile(new File(this.getApplicationContext().getFilesDir(), paintingFileName + "_localpic"));
+        }
+        paintingTitle = "";
         try {
             BufferedReader in = new BufferedReader(new FileReader(new File(this.getApplicationContext().getFilesDir(), paintingFileName)));
             paintingTitle = in.readLine();
@@ -91,9 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        View canvas = findViewById(R.id.canvas);
+        View frontcanvas = findViewById(R.id.frontcanvas);
+        frontcanvas.bringToFront();
+
         // TODO racecase
-        canvas.setOnTouchListener(new View.OnTouchListener() {
+        frontcanvas.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 PaintManager.getInstance();
@@ -108,13 +118,19 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        ImageView backcanvas = findViewById(R.id.backcanvas);
+        PaintManager.getInstance().loadPicture(backcanvas);
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
         // initialize picture
-        View canvas = findViewById(R.id.canvas);
-        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
-        PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+        View canvas = findViewById(R.id.frontcanvas);
+        Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
+        //if (!PaintManager.getInstance().getFile().exists()) {
+            BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
+            PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+      //  }
     }
 
     @Override
@@ -127,10 +143,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_clear:
-                Toast.makeText(this, "here", Toast.LENGTH_LONG).show();;
+                Toast.makeText(this, "here", Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_set:
-                Toast.makeText(this, "herep", Toast.LENGTH_LONG).show();
+                ImageView backcanvas = findViewById(R.id.backcanvas);
+                SaveUpdateMessage update = new SaveUpdateMessage(backcanvas, BitmapUpdateMessage.SAVE_DRAW);
+                PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_SAVE_REQUEST);
                 break;
             default:
                 break;

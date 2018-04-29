@@ -2,14 +2,18 @@ package com.tj.drawwithfrineds;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
+import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,18 +34,28 @@ public class PaintManager {
     private static PaintManager instance;
 
     private int[] currPicture;
+    private File paintFile;
+
+    public void setFile(File toSet) {
+        paintFile = toSet;
+    }
+
+    public File getFile() {
+        return paintFile;
+    }
+
     private int stepMagnitude;
 
     private Handler mHanler;
     private ForkJoinPool threadControl;
     private BlockingQueue<Runnable> workQueue;
+
     // TODO instance should not require an imageview
     public static PaintManager getInstance() {
         if (instance == null) {
             instance = new PaintManager();
             return instance;
-        }
-        else {
+        } else {
             return instance;
         }
     }
@@ -50,13 +64,24 @@ public class PaintManager {
         requestCount = 0;
         updateCount = 0;
         // start paint thread and establish messaging handlers
-        mHanler  = new Handler(Looper.getMainLooper()) {
+        mHanler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message message) {
                 // TODO switch on state
-                BitmapUpdateMessage update = (BitmapUpdateMessage)message.obj;
-                Bitmap toDraw = update.getBitmap();
-                update.getImageView().setImageBitmap(toDraw);
+                int state = message.what;
+                BitmapUpdateMessage update = (BitmapUpdateMessage) message.obj;
+                switch (state) {
+                    case BitmapUpdateMessage.BITMAP_SAVE_COMPLETE:
+                        loadPicture(update.getImageView());
+                        break;
+                    case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
+                        Bitmap toDraw = update.getBitmap();
+                        update.getImageView().setImageBitmap(toDraw);
+                        break;
+                    default:
+                        break;
+                }
+
             }
         };
 
@@ -69,6 +94,7 @@ public class PaintManager {
     public void handleState(BitmapUpdateMessage update, int state) {
         switch (state) {
             case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
+            case BitmapUpdateMessage.BITMAP_SAVE_COMPLETE:
                 updateCount++;
                 //Log.e("PaintManager", "updateCount is " + updateCount);
                 Message updateMessage = mHanler.obtainMessage(state, update);
@@ -78,6 +104,15 @@ public class PaintManager {
                 requestCount++;
                 //Log.e("PaintManager", "requestCount is " + requestCount);
                 threadControl.execute(new PaintWorker(update));
+                break;
+            case BitmapUpdateMessage.BITMAP_SAVE_REQUEST:
+                while (threadControl.isQuiescent()) {
+                    // do nothing
+                }
+                threadControl.execute(new PaintWorker(update));
+                while (threadControl.isQuiescent()) {
+                    // do nothing
+                }
                 break;
             default:
                 break;
@@ -90,7 +125,7 @@ public class PaintManager {
             currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
             for (int i = 0; i < currPicture.length; i++) {
                 currPicture[i] = (int) (0x00ffffff * Math.random());
-                currPicture[i] = currPicture[i] | 0xff000000;
+                currPicture[i] = currPicture[i] & ~0xff000000; // i think this is redundant
             }
         }
         return currPicture;
@@ -100,7 +135,19 @@ public class PaintManager {
         return currPicture;
     }
 
-    public void setCurrPicture(int[] picture) {currPicture = picture;}
+    public void setCurrPicture(int[] picture) {
+        currPicture = picture;
+    }
 
-    public int getStepMagnitude() { return stepMagnitude; }
+    public int getStepMagnitude() {
+        return stepMagnitude;
+    }
+
+    public void loadPicture(ImageView i) {
+        if (paintFile.exists()) {
+            Log.e("loadPicture", "file exists");
+            Bitmap toLoad = BitmapFactory.decodeFile(paintFile.getAbsolutePath());
+            i.setImageBitmap(toLoad);
+        }
+    }
 }
