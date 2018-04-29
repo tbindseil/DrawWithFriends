@@ -93,13 +93,7 @@ class PaintWorker implements Runnable {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DEFAULT);
 
         ImageView canvas = task.getImageView();
-        int[] colorsToDisplay;
-        if (task.getTask() == BitmapUpdateMessage.INIT_DRAW) {
-            colorsToDisplay = PaintManager.getInstance().initCurrPicture(canvas);
-        }
-        else {
-            colorsToDisplay = PaintManager.getInstance().getCurrPicture();
-        }
+        int[] colorsToDisplay = PaintManager.getInstance().getCurrPicture();
         
         switch (task.getTask()) {
             case BitmapUpdateMessage.PENCIL_DRAW: {
@@ -182,12 +176,13 @@ class PaintWorker implements Runnable {
                 }
                 task.handleUpdateState(BitmapUpdateMessage.BITMAP_SAVE_COMPLETE);
                 return;
+            case BitmapUpdateMessage.CLEAR_DRAW:
+                PaintManager.getInstance().clearCurrPicture(canvas);
+                break;
             case BitmapUpdateMessage.INIT_DRAW:
             default:
                 break;
         }
-        // save picture
-        PaintManager.getInstance().setCurrPicture(colorsToDisplay);
 
         Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         task.setBitmap(toDisplay);

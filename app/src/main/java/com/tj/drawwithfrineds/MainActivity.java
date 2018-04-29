@@ -22,6 +22,7 @@ import com.tj.drawwithfrineds.InputTool.QuadrantInputTool;
 import com.tj.drawwithfrineds.InputTool.RandomInputTool;
 import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
+import com.tj.drawwithfrineds.UpdateMessage.ClearUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.InitUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.QuadrantUpdateMessage;
@@ -42,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private int[] currPicture = null;
     private String paintingTitle;
 
-    public String getPaintingTitle() { return paintingTitle; }
+    public String getPaintingTitle() {
+        return paintingTitle;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +83,22 @@ public class MainActivity extends AppCompatActivity {
         switch (toolSelected) {
             case InputTool.PENCIL:
                 toolSelectButton.setText(getString(R.string.pencil_tool));
-                currInputTool = (PencilInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_pencil));
+                currInputTool = (PencilInputTool) getIntent().getSerializableExtra(getString(R.string.tool_type_pencil));
                 break;
             case InputTool.RANDOM:
                 // TODO put these in r/strings
                 toolSelectButton.setText("Random");
-                currInputTool = (RandomInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_random));
+                currInputTool = (RandomInputTool) getIntent().getSerializableExtra(getString(R.string.tool_type_random));
                 break;
             case InputTool.QUADRANT:
                 toolSelectButton.setText("Quadrant");
-                currInputTool = (QuadrantInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_quadrant));
+                currInputTool = (QuadrantInputTool) getIntent().getSerializableExtra(getString(R.string.tool_type_quadrant));
                 break;
             case InputTool.VIEW_ONLY:
             default:
                 // TODO
                 toolSelectButton.setText(getString(R.string.view_only_tool));
-                currInputTool = (ViewOnlyInputTool)getIntent().getSerializableExtra(getString(R.string.tool_type_viewonly));
+                currInputTool = (ViewOnlyInputTool) getIntent().getSerializableExtra(getString(R.string.tool_type_viewonly));
                 break;
         }
 
@@ -125,12 +128,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onWindowFocusChanged(boolean hasFocus) {
         // initialize picture
-        View canvas = findViewById(R.id.frontcanvas);
+        ImageView canvas = findViewById(R.id.frontcanvas);
+        PaintManager.getInstance().allocCurrPic(canvas);
         Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
-        //if (!PaintManager.getInstance().getFile().exists()) {
-            BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
-            PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
-      //  }
+        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
+        PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
     }
 
     @Override
@@ -143,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_clear:
-                Toast.makeText(this, "here", Toast.LENGTH_LONG).show();
+                ImageView frontCanvas = findViewById(R.id.frontcanvas);
+                ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas, BitmapUpdateMessage.CLEAR_DRAW);
+                PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 break;
             case R.id.action_set:
                 ImageView backcanvas = findViewById(R.id.backcanvas);

@@ -25,6 +25,7 @@ public abstract class BitmapUpdateMessage {
     public static final int RANDOM_DRAW = 2;
     public static final int QUADRANT_DRAW = 3;
     public static final int SAVE_DRAW = 4;
+    public static final int CLEAR_DRAW = 5;
     // End of BitmapUpdateMessage Vals
 
     // TODO do this better

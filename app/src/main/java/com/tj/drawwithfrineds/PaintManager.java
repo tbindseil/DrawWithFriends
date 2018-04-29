@@ -73,6 +73,7 @@ public class PaintManager {
                 switch (state) {
                     case BitmapUpdateMessage.BITMAP_SAVE_COMPLETE:
                         loadPicture(update.getImageView());
+                        clearCurrPicture(update.getImageView());
                         break;
                     case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
                         Bitmap toDraw = update.getBitmap();
@@ -119,25 +120,24 @@ public class PaintManager {
         }
     }
 
-    public int[] initCurrPicture(ImageView paintPad) {
+    public void allocCurrPic(ImageView paintPad) {
+        if (currPicture == null) {
+            currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
+        }
+    }
+
+    public int[] clearCurrPicture(ImageView paintPad) {
         // init picture
         if (currPicture == null) {
             currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
-            for (int i = 0; i < currPicture.length; i++) {
-                currPicture[i] = (int) (0x00ffffff * Math.random());
-                currPicture[i] = currPicture[i] & ~0xff000000; // i think this is redundant
-            }
+        }
+        for (int i = 0; i < currPicture.length; i++) {
+            currPicture[i] = 0;
         }
         return currPicture;
     }
 
-    public synchronized int[] getCurrPicture() {
-        return currPicture;
-    }
-
-    public void setCurrPicture(int[] picture) {
-        currPicture = picture;
-    }
+    public int[] getCurrPicture() { return currPicture; }
 
     public int getStepMagnitude() {
         return stepMagnitude;
