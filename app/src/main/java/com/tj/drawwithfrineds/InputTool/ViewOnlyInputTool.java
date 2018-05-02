@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
 /**
@@ -19,7 +18,6 @@ public class ViewOnlyInputTool extends InputTool {
 
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
-        // TODO handle this better
         return null;
     }
 }

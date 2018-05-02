@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
-import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.R;
 import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
@@ -29,7 +28,7 @@ public class PencilInputTool extends InputTool {
     private List<ScreenCord> lastPoints;
 
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
-        RadioGroup thicknessGroup = (RadioGroup)toolSelectActRef.findViewById(R.id.thickness_group);
+        RadioGroup thicknessGroup = toolSelectActRef.findViewById(R.id.thickness_group);
         int thicknessChecked = thicknessGroup.getCheckedRadioButtonId();
         switch (thicknessChecked) {
             case R.id.thinButton:
@@ -46,9 +45,10 @@ public class PencilInputTool extends InputTool {
                 break;
         }
 
-        lastPoints = new ArrayList<ScreenCord>();
+        lastPoints = new ArrayList<>();
     }
-// TODO synchronize touchdown/up first square, pretty much only time when multiple access is possible
+
+    // TODO synchronize touchdown/up first square, pretty much only time when multiple access is possible
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         if (ev == null || canvas == null) {
@@ -59,7 +59,7 @@ public class PencilInputTool extends InputTool {
         int pointerCount = ev.getPointerCount();
         PencilUpdateMessage updates[] = new PencilUpdateMessage[pointerCount];
         for (int i = 0; i < pointerCount; i++) {
-            updates[i] = new PencilUpdateMessage(canvas, BitmapUpdateMessage.PENCIL_DRAW, thickness);
+            updates[i] = new PencilUpdateMessage(canvas, thickness);
         }
 
         // TODO checkout addBatch
@@ -84,23 +84,16 @@ public class PencilInputTool extends InputTool {
                     }
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
-                    if (i == ev.getActionIndex()) { //pointerIndexDownOrUp(ev, i)) {
-                        //Log.e("tag", "i is " + i);
-                        //updates[i].setThickness(thickness * 2);
-                    }
                 case MotionEvent.ACTION_MOVE:
                     List<ScreenCord> touchPoints = new ArrayList<ScreenCord>();
                     touchPoints.add(new ScreenCord(ev.getX(i), ev.getY(i)));
                     touchPoints.add(lastPoints.get(i));
                     ScreenCord updateLastPoint = new ScreenCord(ev.getX(i), ev.getY(i));
                     lastPoints.set(i, updateLastPoint);
-                    //lastPoints.get(i).x = ev.getX(i);// touchPoints.get(0).x;
-                    //lastPoints.get(i).y = ev.getY(i);//touchPoints.get(0).y;
                     updates[i].setCords(touchPoints);
-                    //Log.e("PencilInputTool", "i is " + i + " and touchPoints.size() is " + touchPoints.size() + " and action is " + ev.getActionMasked());
+
                     break;
                 default:
-                    //Log.e("PencilInputTool", "action is " + ev.getAction());
                     updates[i] = null;
                     break;
             }

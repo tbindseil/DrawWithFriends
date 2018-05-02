@@ -33,6 +33,7 @@ public class PaintManager {
     private int updateCount;
     private static PaintManager instance;
 
+    int[] pixelArray;
     private int[] currPicture;
     private File paintFile;
 
@@ -72,7 +73,9 @@ public class PaintManager {
                 BitmapUpdateMessage update = (BitmapUpdateMessage) message.obj;
                 switch (state) {
                     case BitmapUpdateMessage.BITMAP_SAVE_COMPLETE:
+                        Log.e("PahandlerMessage", "about to load");
                         loadPicture(update.getImageView());
+                        Log.e("PahandlerMessage", "about to clear");
                         clearCurrPicture(update.getImageView());
                         break;
                     case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
@@ -127,6 +130,7 @@ public class PaintManager {
     }
 
     public int[] clearCurrPicture(ImageView paintPad) {
+        Log.e("clearCurrPicture", "CLEARING PICTURE");
         // init picture
         if (currPicture == null) {
             currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
@@ -138,6 +142,25 @@ public class PaintManager {
     }
 
     public int[] getCurrPicture() { return currPicture; }
+
+    public int[] getLocalPic(ImageView i) {
+        Log.e("getLocalPic", "calling getlocalpic");
+        if (paintFile.exists()) {
+            Bitmap toLoad = BitmapFactory.decodeFile(paintFile.getAbsolutePath());
+            pixelArray = new int[i.getHeight() * i.getWidth()];
+            toLoad.getPixels(pixelArray, 0, i.getWidth(), 0, 0, i.getWidth(), i.getHeight());
+            return pixelArray;
+        }
+        else {
+            pixelArray = new int[i.getWidth() * i.getHeight()];
+            for (int ii = 0; ii< pixelArray.length; ii++) {
+                pixelArray[ii] = 0;
+            }
+            return pixelArray;
+        }
+    }
+
+    public void clearLocalPic() { pixelArray = null; }
 
     public int getStepMagnitude() {
         return stepMagnitude;

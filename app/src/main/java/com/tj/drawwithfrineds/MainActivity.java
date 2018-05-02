@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView canvas = findViewById(R.id.frontcanvas);
         PaintManager.getInstance().allocCurrPic(canvas);
         Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
-        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas, BitmapUpdateMessage.INIT_DRAW);
+        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas);
         PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
     }
 
@@ -146,12 +146,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_clear:
                 ImageView frontCanvas = findViewById(R.id.frontcanvas);
-                ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas, BitmapUpdateMessage.CLEAR_DRAW);
+                ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas);
                 PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 break;
             case R.id.action_set:
+                Log.e("menuhandler", "set button pressed");
                 ImageView backcanvas = findViewById(R.id.backcanvas);
-                SaveUpdateMessage update = new SaveUpdateMessage(backcanvas, BitmapUpdateMessage.SAVE_DRAW);
+                SaveUpdateMessage update = new SaveUpdateMessage(backcanvas);
                 PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_SAVE_REQUEST);
                 break;
             default:

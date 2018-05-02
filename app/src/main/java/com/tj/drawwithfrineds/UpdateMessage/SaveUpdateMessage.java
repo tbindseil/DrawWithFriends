@@ -7,7 +7,7 @@ import android.widget.ImageView;
  */
 
 public class SaveUpdateMessage extends BitmapUpdateMessage {
-    public SaveUpdateMessage(ImageView paintPad, int task) {
-        super(paintPad, task);
+    public SaveUpdateMessage(ImageView paintPad) {
+        super(paintPad, BitmapUpdateMessage.SAVE_DRAW);
     }
 }

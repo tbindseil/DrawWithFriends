@@ -7,7 +7,7 @@ import android.widget.ImageView;
  */
 
 public class ClearUpdateMessage extends BitmapUpdateMessage {
-    public ClearUpdateMessage(ImageView paintPad, int task) {
-        super(paintPad, task);
+    public ClearUpdateMessage(ImageView paintPad) {
+        super(paintPad, BitmapUpdateMessage.CLEAR_DRAW);
     }
 }

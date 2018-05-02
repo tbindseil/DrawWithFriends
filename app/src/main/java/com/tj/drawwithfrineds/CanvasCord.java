@@ -1,6 +1,5 @@
 package com.tj.drawwithfrineds;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -16,10 +15,8 @@ public class CanvasCord {
     }
 
     public CanvasCord(ScreenCord screenCord, ImageView canvas) {
-        //Log.d("CanvasCord", "Incoming screenCord.x is " + screenCord.x + " and screenCord.y is " + screenCord.y);
         this.x = (int)screenCord.x;
         this.y = (int)screenCord.y;
-        //Log.d("CanvasCord", "this.x is " + this.x + " and this.y is " + this.y);
     }
 
     public double distanceSquaredFrom(CanvasCord otherCord) {
@@ -28,8 +25,5 @@ public class CanvasCord {
 
     public double distanceSquaredFromOrigin() {
         return Math.pow(x, 2) + Math.pow(y, 2);
-    }
-    public boolean equals(CanvasCord otherCord) {
-        return (otherCord.x == x && otherCord.y == y) ? true : false;
     }
 }

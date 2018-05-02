@@ -9,7 +9,7 @@ import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
  */
 
 public class RandomUpdateMessage extends BitmapUpdateMessage {
-    public RandomUpdateMessage(ImageView paintPad, int task) {
-        super(paintPad, task);
+    public RandomUpdateMessage(ImageView paintPad) {
+        super(paintPad, BitmapUpdateMessage.RANDOM_DRAW);
     }
 }

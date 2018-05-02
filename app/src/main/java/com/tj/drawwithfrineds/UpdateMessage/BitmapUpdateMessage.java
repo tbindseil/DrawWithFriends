@@ -9,10 +9,6 @@ import com.tj.drawwithfrineds.PaintManager;
  * Created by TJ on 2/25/2018.
  */
 public abstract class BitmapUpdateMessage {
-    private ImageView screen;
-    private Bitmap bitmap;
-    private int task;
-
     // status
     public static final int BITMAP_RENDER_COMPLETE = 1;
     public static final int BITMAP_SAVE_COMPLETE = 2;
@@ -28,15 +24,14 @@ public abstract class BitmapUpdateMessage {
     public static final int CLEAR_DRAW = 5;
     // End of BitmapUpdateMessage Vals
 
-    // TODO do this better
-    public BitmapUpdateMessage() {
-        screen = null;
-        task = -1;
-    }
+    private ImageView screen;
+    private Bitmap bitmap;
+    private int task;
 
     public BitmapUpdateMessage(ImageView paintPad, int task) {
         screen = paintPad;
         this.task = task;
+        bitmap = null;
     }
 
     public void setBitmap(Bitmap bm) {
@@ -51,6 +46,8 @@ public abstract class BitmapUpdateMessage {
         return bitmap;
     }
 
+    public int getTask() { return task; }
+
     public void handleUpdateState(int state) {
         switch (state) {
             case BITMAP_RENDER_COMPLETE:
@@ -60,9 +57,5 @@ public abstract class BitmapUpdateMessage {
             default:
                 break;
         }
-    }
-
-    public int getTask() {
-        return task;
     }
 }

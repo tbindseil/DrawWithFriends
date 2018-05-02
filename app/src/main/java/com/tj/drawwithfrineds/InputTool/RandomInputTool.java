@@ -5,7 +5,6 @@ import android.support.constraint.ConstraintLayout;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import com.tj.drawwithfrineds.InputTool.InputTool;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.RandomUpdateMessage;
 
@@ -21,7 +20,7 @@ public class RandomInputTool extends InputTool {
     @Override
     public BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas) {
         if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas, BitmapUpdateMessage.RANDOM_DRAW);
+            BitmapUpdateMessage randomTask = new RandomUpdateMessage(canvas);
             BitmapUpdateMessage[] updates = new BitmapUpdateMessage[1];
             updates[0] = randomTask;
             return updates;

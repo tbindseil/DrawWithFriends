@@ -1,6 +1,5 @@
 package com.tj.drawwithfrineds.InputTool;
 
-import android.support.constraint.ConstraintLayout;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 

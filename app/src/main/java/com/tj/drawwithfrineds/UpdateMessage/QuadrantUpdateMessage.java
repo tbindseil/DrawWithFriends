@@ -7,8 +7,8 @@ import android.widget.ImageView;
  */
 
 public class QuadrantUpdateMessage extends BitmapUpdateMessage {
-    public QuadrantUpdateMessage(ImageView paintPad, int task) {
-        super(paintPad, task);
+    public QuadrantUpdateMessage(ImageView paintPad) {
+        super(paintPad, BitmapUpdateMessage.QUADRANT_DRAW);
     }
 
 }

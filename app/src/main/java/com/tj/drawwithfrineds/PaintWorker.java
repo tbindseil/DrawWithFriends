@@ -94,7 +94,8 @@ class PaintWorker implements Runnable {
 
         ImageView canvas = task.getImageView();
         int[] colorsToDisplay = PaintManager.getInstance().getCurrPicture();
-        
+
+        int nextState = BitmapUpdateMessage.BITMAP_RENDER_COMPLETE;
         switch (task.getTask()) {
             case BitmapUpdateMessage.PENCIL_DRAW: {
                 PencilUpdateMessage castedTask = (PencilUpdateMessage) task;
@@ -163,19 +164,31 @@ class PaintWorker implements Runnable {
                 break;
             }
             case BitmapUpdateMessage.SAVE_DRAW:
+                int[] pixelArray = PaintManager.getInstance().getLocalPic(canvas);
+                Log.e("SAVEDRAW", "just got local pic");
+                for (int i = 0; i < colorsToDisplay.length; i++) {
+                    if (!((colorsToDisplay[i] & 0xFF000000) == 0xFF)) {
+                        colorsToDisplay[i] = pixelArray[i];
+                    }
+                }
+                Log.e("SAVEDRAW", "done copying");
+                PaintManager.getInstance().clearLocalPic();
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
                 FileOutputStream out = null;
                 try {
                     Log.e("SAVE_DRAW", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
-                    PaintManager.getInstance().getFile().createNewFile();
+                    if (PaintManager.getInstance().getFile().exists()) {
+                        PaintManager.getInstance().getFile().delete();
+                    }
                     out = new FileOutputStream(PaintManager.getInstance().getFile());
                     toDisplay.compress(Bitmap.CompressFormat.PNG, 100, out);
                     out.close();
                 } catch (Exception e) {
                     Log.e("SAVE_DRAW", "caught exception while saving " + e.getMessage());
                 }
-                task.handleUpdateState(BitmapUpdateMessage.BITMAP_SAVE_COMPLETE);
-                return;
+                Log.e("SAVEDRAW", "done saving");
+                nextState = BitmapUpdateMessage.BITMAP_SAVE_COMPLETE;
+                break;
             case BitmapUpdateMessage.CLEAR_DRAW:
                 PaintManager.getInstance().clearCurrPicture(canvas);
                 break;
@@ -186,6 +199,6 @@ class PaintWorker implements Runnable {
 
         Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         task.setBitmap(toDisplay);
-        task.handleUpdateState(BitmapUpdateMessage.BITMAP_RENDER_COMPLETE);
+        task.handleUpdateState(nextState);
     }
 }
