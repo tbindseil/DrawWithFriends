@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -20,18 +21,21 @@ public class ListPaintingsActivity extends AppCompatActivity {
 
         LinearLayout ll = findViewById(R.id.painting_list);
         BufferedReader in;
+        Log.e("ListPaintingActivity", "allProjects.length is " + allProjects.length);
         for (int i = 0; i < allProjects.length; i++) {
+            Log.e("ListPaintingsActivity", "i is " + i + " and allProjects[i].getNAme() is " + allProjects[i].getName());
+            if (!(allProjects[i].getName().endsWith("_config"))) {
+                continue;
+            }
+
             try {
                 in = new BufferedReader(new FileReader(allProjects[i]));
                 String currProjectTitle = in.readLine();
-                if (currProjectTitle.endsWith("localpic")) {
-                    continue;
-                }
                 TextView curr = new TextView(this.getApplicationContext());
                 curr.setText(currProjectTitle);
                 ll.addView(curr);
             } catch (Exception e) {
-                // TODO handle exception
+                Log.e("displayPaintings", "exception caught");
             }
         }
     }
@@ -40,7 +44,7 @@ public class ListPaintingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_paintings);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ListPaintingsActivityTitle);
         setSupportActionBar(myToolbar);
 

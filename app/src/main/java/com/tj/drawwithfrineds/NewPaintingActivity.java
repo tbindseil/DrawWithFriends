@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,10 +55,11 @@ public class NewPaintingActivity extends AppCompatActivity {
         return filenameBuf.toString();
     }
 
-    public boolean createPaintingFile(String paintingName, String filename) {
+    public boolean createPaintingFile(String paintingName, File filename) {
+        Log.e("createPaintingFile", "paintingName: " + paintingName + " filename: " + filename.getName());
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream = openFileOutput(filename.getName(), Context.MODE_PRIVATE);
             // first line of all paintingFiles is the painting name
             // TODO maybe a magic string for first line to show it is a painting file?
             outputStream.write(paintingName.getBytes());
@@ -71,9 +73,45 @@ public class NewPaintingActivity extends AppCompatActivity {
         return true;
     }
 
+    public String createFileName(String paintingName) {
+        StringBuilder ret = new StringBuilder("");
+        for (int i = 0; i < paintingName.length(); i++) {
+            if (Character.isLetter(paintingName.charAt(i))) {
+                ret.append(i);
+            }
+            else if (paintingName.charAt(i) == ' ') {
+                ret.append(' ');
+            }
+            else {
+                Log.e("createFileName", "somehow nonvalid character!");
+                return null;
+            }
+        }
+        ret.append("_config");
+        return ret.toString();
+    }
+
+    public File isUniquePaintingName(String paintingName) {
+        String fileNameReturn = createFileName(paintingName);
+        Log.e("isUniquePaintingName", "fileNameReturn is " + fileNameReturn);
+        if (fileNameReturn == null) {
+            return null;
+        }
+        File potentialPaintingFile = new File(fileNameReturn);
+        if (potentialPaintingFile.exists())
+            return null;
+        else {
+            return potentialPaintingFile;
+        }
+    }
+
+    // only alphanumeric and " ", the latter will be replaced with "_"
     public boolean isValidPaintingName(String paintingName) {
-        // must be unique
-        // TODO
+        for (int i = 0; i < paintingName.length(); i++) {
+            if (!(Character.isLetter(paintingName.charAt(i)) || paintingName.charAt(i) == ' ')) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -81,14 +119,17 @@ public class NewPaintingActivity extends AppCompatActivity {
         EditText paintingTitleEditText = findViewById(R.id.enterPaintingTitle);
         String paintingName = paintingTitleEditText.getText().toString();
         if (!isValidPaintingName(paintingName)) {
-            // TODO
+            Toast.makeText(this, "name must be made of a-z,A-Z, or _", Toast.LENGTH_LONG).show();
         }
-        String filename = getNextFileName(paintingName);
-        if (createPaintingFile(paintingName, filename)) {
-            // TODO
+        File potentialPaintingFile = isUniquePaintingName(paintingName);
+        if (potentialPaintingFile == null) {
+            Toast.makeText(this, "A Painting Already has this Name!", Toast.LENGTH_LONG).show();
+        }
+        if (createPaintingFile(paintingName, potentialPaintingFile)) {
+            Log.e("NewPaintingActivity", "failed to createPaintingFile");
         }
         Intent intent = new Intent(NewPaintingActivity.this, MainActivity.class);
-        intent.putExtra(getString(R.string.painting_to_load), filename);
+        intent.putExtra(getString(R.string.painting_to_load), potentialPaintingFile.getName());
         startActivity(intent);
     }
 

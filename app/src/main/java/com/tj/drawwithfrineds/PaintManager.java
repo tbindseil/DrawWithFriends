@@ -35,6 +35,7 @@ public class PaintManager {
 
     int[] pixelArray;
     private int[] currPicture;
+    private File configFile;
     private File paintFile;
 
     public void setFile(File toSet) {
