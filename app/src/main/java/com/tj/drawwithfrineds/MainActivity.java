@@ -2,6 +2,7 @@ package com.tj.drawwithfrineds;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -155,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
                 SaveUpdateMessage update = new SaveUpdateMessage(backcanvas);
                 PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_SAVE_REQUEST);
                 break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             default:
                 break;
         }
