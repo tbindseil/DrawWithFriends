@@ -119,6 +119,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
     // clear all other options
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(ToolSelectionActivity.this, MainActivity.class);
+        intent.putExtra(getString(R.string.painting_to_load), PaintManager.getInstance().getProjectDir().getName());
         switch (item.getItemId()) {
             case R.id.action_cancel:
                 startActivity(intent);
