@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -41,32 +42,21 @@ import static java.lang.Thread.sleep;
 public class MainActivity extends AppCompatActivity {
     private InputTool currInputTool;
 
-    private int[] currPicture = null;
     private String paintingTitle;
-
-    public String getPaintingTitle() {
-        return paintingTitle;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String paintingFileName = getIntent().getStringExtra(getString(R.string.painting_to_load));
-        if (paintingFileName != null) {
-            PaintManager.getInstance().setFile(new File(this.getApplicationContext().getFilesDir(), paintingFileName + "_localpic"));
-        }
-        paintingTitle = "";
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(new File(this.getApplicationContext().getFilesDir(), paintingFileName)));
-            paintingTitle = in.readLine();
-        } catch (Exception e) {
-            // TODO
-            Log.e("onCreate", "failed to read paintingFile");
-        }
+        // todo, if no extra, dont open project
+        String paintingDirName = getIntent().getStringExtra(getString(R.string.painting_to_load));
+        PaintManager.getInstance().openProject(paintingDirName);
+        Log.e("MainActivity", "paintingDirName is " + paintingDirName);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        paintingTitle = PaintManager.getInstance().getProjectName();
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         // TODO give title its own line or in toolbar??
         myToolbar.setTitle(paintingTitle);
         setSupportActionBar(myToolbar);
@@ -123,17 +113,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView backcanvas = findViewById(R.id.backcanvas);
-        PaintManager.getInstance().loadPicture(backcanvas);
+        ImageView backCanvas = findViewById(R.id.backcanvas);
+        if (PaintManager.getInstance().getLocalPaintFile().exists()) {
+            backCanvas.setImageURI(Uri.fromFile(PaintManager.getInstance().getLocalPaintFile()));
+        } // else it defaults to white
+        //PaintManager.getInstance().loadPicture(backcanvas);
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
         // initialize picture
         ImageView canvas = findViewById(R.id.frontcanvas);
-        PaintManager.getInstance().allocCurrPic(canvas);
-        Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
-        BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas);
-        PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+        PaintManager.getInstance().allocFrontPic(canvas); // TODO, this could probably be in a better spot
+        // Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
+        // BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas);
+        // PaintManager.getInstance().handleState(init, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
     }
 
     @Override

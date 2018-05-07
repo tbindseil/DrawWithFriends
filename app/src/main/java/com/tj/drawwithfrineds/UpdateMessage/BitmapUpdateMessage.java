@@ -28,6 +28,7 @@ public abstract class BitmapUpdateMessage {
     private Bitmap bitmap;
     private int task;
 
+    // todo, use some kind of rectangle offset rather than the image view itself
     public BitmapUpdateMessage(ImageView paintPad, int task) {
         screen = paintPad;
         this.task = task;

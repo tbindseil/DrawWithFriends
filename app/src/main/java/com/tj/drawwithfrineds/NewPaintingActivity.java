@@ -41,7 +41,7 @@ public class NewPaintingActivity extends AppCompatActivity {
     }
 
     // replace any non alphanumeric character with '_'
-    public String getNextFileName(String paintingName) {
+    /*public String getNextFileName(String paintingName) {
         StringBuffer filenameBuf = new StringBuffer(paintingName.length());
         for (int i = 0; i < paintingName.length(); i++) {
             if ((paintingName.charAt(i) >= '0' && paintingName.charAt(i) <= '9') ||
@@ -53,27 +53,40 @@ public class NewPaintingActivity extends AppCompatActivity {
             }
         }
         return filenameBuf.toString();
-    }
+    }*/
 
-    public boolean createPaintingFile(String paintingName, File filename) {
-        Log.e("createPaintingFile", "paintingName: " + paintingName + " filename: " + filename.getName());
+    public boolean createPaintingDir(String paintingName, File dir) {
+        Log.e("createPaintingDir", "paintingName: " + paintingName + " dirname: " + dir.getName());
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(filename.getName(), Context.MODE_PRIVATE);
-            // first line of all paintingFiles is the painting name
-            // TODO maybe a magic string for first line to show it is a painting file?
+            dir.mkdir();
+
+            // make empty global and local pics
+            String globalPicName = dir.getAbsolutePath() + File.pathSeparator + "global.png";
+            outputStream = openFileOutput(globalPicName, Context.MODE_PRIVATE);
+            outputStream.flush();
+            outputStream.close();
+
+            String localPicName = dir.getAbsolutePath() + File.pathSeparator + "local.png";
+            outputStream = openFileOutput(localPicName, Context.MODE_PRIVATE);
+            outputStream.flush();
+            outputStream.close();
+
+            // make config file
+            String configFileName = dir.getAbsolutePath() + File.pathSeparator + "config";
+            outputStream = openFileOutput(configFileName, Context.MODE_PRIVATE);
             outputStream.write(paintingName.getBytes());
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
             // TODO
-            Log.e("createPaintingFile", "createNewFile failed");
+            Log.e("createPaintingDir", "failed");
             return false;
         }
         return true;
     }
 
-    public String createFileName(String paintingName) {
+    public String createDirName(String paintingName) {
         StringBuilder ret = new StringBuilder("");
         for (int i = 0; i < paintingName.length(); i++) {
             if (Character.isLetter(paintingName.charAt(i))) {
@@ -87,21 +100,20 @@ public class NewPaintingActivity extends AppCompatActivity {
                 return null;
             }
         }
-        ret.append("_config");
         return ret.toString();
     }
 
     public File isUniquePaintingName(String paintingName) {
-        String fileNameReturn = createFileName(paintingName);
-        Log.e("isUniquePaintingName", "fileNameReturn is " + fileNameReturn);
-        if (fileNameReturn == null) {
+        String dirNameReturn = createDirName(paintingName);
+        Log.e("isUniquePaintingName", "fileNameReturn is " + dirNameReturn);
+        if (dirNameReturn == null) {
             return null;
         }
-        File potentialPaintingFile = new File(fileNameReturn);
-        if (potentialPaintingFile.exists())
+        File potentialPaintingDir = new File(dirNameReturn);
+        if (potentialPaintingDir.exists())
             return null;
         else {
-            return potentialPaintingFile;
+            return potentialPaintingDir;
         }
     }
 
@@ -121,15 +133,15 @@ public class NewPaintingActivity extends AppCompatActivity {
         if (!isValidPaintingName(paintingName)) {
             Toast.makeText(this, "name must be made of a-z,A-Z, or _", Toast.LENGTH_LONG).show();
         }
-        File potentialPaintingFile = isUniquePaintingName(paintingName);
-        if (potentialPaintingFile == null) {
+        File potentialPaintingDir = isUniquePaintingName(paintingName);
+        if (potentialPaintingDir == null) {
             Toast.makeText(this, "A Painting Already has this Name!", Toast.LENGTH_LONG).show();
         }
-        if (createPaintingFile(paintingName, potentialPaintingFile)) {
+        if (createPaintingDir(paintingName, potentialPaintingDir)) {
             Log.e("NewPaintingActivity", "failed to createPaintingFile");
         }
         Intent intent = new Intent(NewPaintingActivity.this, MainActivity.class);
-        intent.putExtra(getString(R.string.painting_to_load), potentialPaintingFile.getName());
+        intent.putExtra(getString(R.string.painting_to_load), potentialPaintingDir.getName());
         startActivity(intent);
     }
 

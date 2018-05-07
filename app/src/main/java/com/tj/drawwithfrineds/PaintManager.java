@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
 import java.io.File;
+import java.io.FileReader;
+import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,19 +35,27 @@ public class PaintManager {
     private int updateCount;
     private static PaintManager instance;
 
-    int[] pixelArray;
-    private int[] currPicture;
+    private int[] frontPicture;
+    private int[] backPicture;
+    private File projectDir;
     private File configFile;
-    private File paintFile;
+    private File localPaintFile;
+    private File globalPaintFile;
 
-    public void setFile(File toSet) {
-        paintFile = toSet;
+    private String projectName;
+/*
+    public void setConfigFile(File toSet) {
+        configFile = toSet;
     }
 
-    public File getFile() {
-        return paintFile;
+    public File getConfigFile() {
+        return configFile;
     }
 
+    public void setLocalPaintFile(File toSet) { paintFile = toSet; }
+
+    public File getGlobalPaintFile() { return paintFile; }
+*/
     private int stepMagnitude;
 
     private Handler mHanler;
@@ -65,6 +75,13 @@ public class PaintManager {
     private PaintManager() {
         requestCount = 0;
         updateCount = 0;
+
+        configFile = null;
+        localPaintFile = null;
+        globalPaintFile = null;
+
+        projectName = "";
+
         // start paint thread and establish messaging handlers
         mHanler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -75,9 +92,9 @@ public class PaintManager {
                 switch (state) {
                     case BitmapUpdateMessage.BITMAP_SAVE_COMPLETE:
                         Log.e("PahandlerMessage", "about to load");
-                        loadPicture(update.getImageView());
+                        update.getImageView().setImageBitmap(update.getBitmap());
                         Log.e("PahandlerMessage", "about to clear");
-                        clearCurrPicture(update.getImageView());
+                        clearFrontPicture(update.getImageView());
                         break;
                     case BitmapUpdateMessage.BITMAP_RENDER_COMPLETE:
                         Bitmap toDraw = update.getBitmap();
@@ -93,8 +110,34 @@ public class PaintManager {
         stepMagnitude = 1;
         workQueue = new LinkedBlockingDeque<>();
         threadControl = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), ForkJoinPool.defaultForkJoinWorkerThreadFactory, null, true);
-        //new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors(), 60, TimeUnit.SECONDS, workQueue);
     }
+
+    public void openProject(String projectDir) {
+        this.projectDir = new File(projectDir);
+
+        // TODO wait till no more events for last file
+        configFile = new File(projectDir + File.pathSeparator + "config");
+        try {
+            Scanner sr = new Scanner(configFile);
+            if (sr.hasNextLine()) {
+                projectName = sr.nextLine();
+            }
+            else {
+                Log.e("openProject", "reading config file error");
+            }
+        } catch (Exception e) {
+            Log.e("openProject", "reading config file error");
+        }
+
+        localPaintFile = new File(projectDir + File.pathSeparator + "local");
+        globalPaintFile = new File(projectDir + File.pathSeparator + "global");
+    }
+
+    public File getProjectDir() { return projectDir; }
+    public File getConfigFile() { return configFile; }
+    public File getLocalPaintFile() { return localPaintFile; }
+    public File getGlobalPaintFile() { return globalPaintFile; }
+    public String getProjectName() { return projectName; }
 
     public void handleState(BitmapUpdateMessage update, int state) {
         switch (state) {
@@ -124,54 +167,51 @@ public class PaintManager {
         }
     }
 
-    public void allocCurrPic(ImageView paintPad) {
-        if (currPicture == null) {
-            currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
+    public void allocFrontPic(ImageView paintPad) {
+        if (frontPicture == null) {
+            frontPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
         }
     }
 
-    public int[] clearCurrPicture(ImageView paintPad) {
+    // todo, this should not depend on paintpad at all
+    public int[] clearFrontPicture(ImageView paintPad) {
         Log.e("clearCurrPicture", "CLEARING PICTURE");
         // init picture
-        if (currPicture == null) {
-            currPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
+        if (frontPicture == null) {
+            frontPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
         }
-        for (int i = 0; i < currPicture.length; i++) {
-            currPicture[i] = 0;
+        for (int i = 0; i < frontPicture.length; i++) {
+            frontPicture[i] = 0;
         }
-        return currPicture;
+        return frontPicture;
     }
 
-    public int[] getCurrPicture() { return currPicture; }
+    public int[] getFrontPicture() { return frontPicture; }
 
     public int[] getLocalPic(ImageView i) {
         Log.e("getLocalPic", "calling getlocalpic");
-        if (paintFile.exists()) {
-            Bitmap toLoad = BitmapFactory.decodeFile(paintFile.getAbsolutePath());
-            pixelArray = new int[i.getHeight() * i.getWidth()];
-            toLoad.getPixels(pixelArray, 0, i.getWidth(), 0, 0, i.getWidth(), i.getHeight());
-            return pixelArray;
+        if (localPaintFile.exists()) {
+            Bitmap toLoad = BitmapFactory.decodeFile(localPaintFile.getAbsolutePath());
+            backPicture = new int[i.getHeight() * i.getWidth()];
+            toLoad.getPixels(backPicture, 0, i.getWidth(), 0, 0, i.getWidth(), i.getHeight());
+            return backPicture;
         }
         else {
-            pixelArray = new int[i.getWidth() * i.getHeight()];
-            for (int ii = 0; ii< pixelArray.length; ii++) {
-                pixelArray[ii] = 0;
-            }
-            return pixelArray;
+            return null;
         }
     }
 
-    public void clearLocalPic() { pixelArray = null; }
+    public void clearLocalPic() { backPicture = null; }
 
     public int getStepMagnitude() {
         return stepMagnitude;
     }
-
+/*
     public void loadPicture(ImageView i) {
         if (paintFile.exists()) {
             Log.e("loadPicture", "file exists");
             Bitmap toLoad = BitmapFactory.decodeFile(paintFile.getAbsolutePath());
             i.setImageBitmap(toLoad);
         }
-    }
+    }*/
 }

@@ -24,19 +24,10 @@ public class ListPaintingsActivity extends AppCompatActivity {
         Log.e("ListPaintingActivity", "allProjects.length is " + allProjects.length);
         for (int i = 0; i < allProjects.length; i++) {
             Log.e("ListPaintingsActivity", "i is " + i + " and allProjects[i].getNAme() is " + allProjects[i].getName());
-            if (!(allProjects[i].getName().endsWith("_config"))) {
-                continue;
-            }
-
-            try {
-                in = new BufferedReader(new FileReader(allProjects[i]));
-                String currProjectTitle = in.readLine();
-                TextView curr = new TextView(this.getApplicationContext());
-                curr.setText(currProjectTitle);
-                ll.addView(curr);
-            } catch (Exception e) {
-                Log.e("displayPaintings", "exception caught");
-            }
+            String currProjectTitle = allProjects[i].getName();
+            TextView curr = new TextView(this.getApplicationContext());
+            curr.setText(currProjectTitle);
+            ll.addView(curr);
         }
     }
 

@@ -93,7 +93,7 @@ class PaintWorker implements Runnable {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DEFAULT);
 
         ImageView canvas = task.getImageView();
-        int[] colorsToDisplay = PaintManager.getInstance().getCurrPicture();
+        int[] colorsToDisplay = PaintManager.getInstance().getFrontPicture();
 
         int nextState = BitmapUpdateMessage.BITMAP_RENDER_COMPLETE;
         switch (task.getTask()) {
@@ -164,23 +164,30 @@ class PaintWorker implements Runnable {
                 break;
             }
             case BitmapUpdateMessage.SAVE_DRAW:
-                int[] pixelArray = PaintManager.getInstance().getLocalPic(canvas);
-                Log.e("SAVEDRAW", "just got local pic");
-                for (int i = 0; i < colorsToDisplay.length; i++) {
-                    if (!((colorsToDisplay[i] & 0xFF000000) == 0xFF)) {
-                        colorsToDisplay[i] = pixelArray[i];
+                int[] backPicture = PaintManager.getInstance().getLocalPic(canvas);
+                if (backPicture != null) {
+                    Log.e("SAVEDRAW", "just got local pic");
+                    for (int i = 0; i < colorsToDisplay.length; i++) {
+                        if (!((colorsToDisplay[i] & 0xFF000000) == 0xFF)) {
+                            colorsToDisplay[i] = backPicture[i];
+                        }
                     }
+                    Log.e("SAVEDRAW", "done copying");
+
+                    // free excessive memory
+                    backPicture = null;
+                    PaintManager.getInstance().clearLocalPic();
                 }
-                Log.e("SAVEDRAW", "done copying");
-                PaintManager.getInstance().clearLocalPic();
+
+                // overwrite old localpic with new localpic
                 Bitmap toDisplay = Bitmap.createBitmap(colorsToDisplay, canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
                 FileOutputStream out = null;
                 try {
-                    Log.e("SAVE_DRAW", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
-                    if (PaintManager.getInstance().getFile().exists()) {
-                        PaintManager.getInstance().getFile().delete();
+                    Log.e("SAVE_DRAW", "filename is " + PaintManager.getInstance().getLocalPaintFile().getAbsolutePath());
+                    if (PaintManager.getInstance().getLocalPaintFile().exists()) {
+                        PaintManager.getInstance().getLocalPaintFile().delete();
                     }
-                    out = new FileOutputStream(PaintManager.getInstance().getFile());
+                    out = new FileOutputStream(PaintManager.getInstance().getLocalPaintFile());
                     toDisplay.compress(Bitmap.CompressFormat.PNG, 100, out);
                     out.close();
                 } catch (Exception e) {
@@ -190,7 +197,7 @@ class PaintWorker implements Runnable {
                 nextState = BitmapUpdateMessage.BITMAP_SAVE_COMPLETE;
                 break;
             case BitmapUpdateMessage.CLEAR_DRAW:
-                PaintManager.getInstance().clearCurrPicture(canvas);
+                PaintManager.getInstance().clearFrontPicture(canvas);
                 break;
             case BitmapUpdateMessage.INIT_DRAW:
             default:
