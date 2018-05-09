@@ -55,32 +55,46 @@ public class NewPaintingActivity extends AppCompatActivity {
         return filenameBuf.toString();
     }*/
 
+    // todo, check for null
     public boolean createPaintingDir(String paintingName, File dir) {
+        if (dir.canWrite()){
+            Log.e("canwriet", "canr");
+        }
         Log.e("createPaintingDir", "paintingName: " + paintingName + " dirname: " + dir.getName());
         FileOutputStream outputStream;
         try {
-            dir.mkdir();
+            if (dir.mkdir()) {
+                Log.e("true", "true");
+            }
+            else {
+                if (dir.mkdirs()) {
+                    Log.e("dirs", "dirs");
+                }
+                else {
+                    Log.e("fuk", "fuc");
+                }
+            }
+            Log.e("createPaintingDir", "fuck");
 
             // make empty global and local pics
-            String globalPicName = dir.getAbsolutePath() + File.pathSeparator + "global.png";
-            outputStream = openFileOutput(globalPicName, Context.MODE_PRIVATE);
-            outputStream.flush();
-            outputStream.close();
-
-            String localPicName = dir.getAbsolutePath() + File.pathSeparator + "local.png";
-            outputStream = openFileOutput(localPicName, Context.MODE_PRIVATE);
-            outputStream.flush();
-            outputStream.close();
-
+            File globalPic = new File(dir.getAbsolutePath(), "global.png");
+            globalPic.createNewFile();
+            Log.e("createPaintingDir", "fuck1");
+            File localPic = new File(dir.getAbsolutePath(), "local.png");
+            localPic.createNewFile();
+            Log.e("createPaintingDir", "fuck2");
             // make config file
-            String configFileName = dir.getAbsolutePath() + File.pathSeparator + "config";
-            outputStream = openFileOutput(configFileName, Context.MODE_PRIVATE);
+            File configFile = new File(dir.getAbsolutePath(), "config");
+            configFile.createNewFile();
+            Log.e("createPaintingDir", "fuck3");
+            outputStream = new FileOutputStream(configFile);
             outputStream.write(paintingName.getBytes());
             outputStream.flush();
+            Log.e("createPaintingDir", "fuck4");
             outputStream.close();
         } catch (Exception e) {
             // TODO
-            Log.e("createPaintingDir", "failed");
+            Log.e("createPaintingDir", "failed" + e.getMessage());
             return false;
         }
         return true;
@@ -90,10 +104,10 @@ public class NewPaintingActivity extends AppCompatActivity {
         StringBuilder ret = new StringBuilder("");
         for (int i = 0; i < paintingName.length(); i++) {
             if (Character.isLetter(paintingName.charAt(i))) {
-                ret.append(i);
+                ret.append(paintingName.charAt(i));
             }
             else if (paintingName.charAt(i) == ' ') {
-                ret.append(' ');
+                ret.append('_');
             }
             else {
                 Log.e("createFileName", "somehow nonvalid character!");
@@ -109,7 +123,10 @@ public class NewPaintingActivity extends AppCompatActivity {
         if (dirNameReturn == null) {
             return null;
         }
-        File potentialPaintingDir = new File(dirNameReturn);
+        File potentialPaintingDir = new File(this.getApplicationContext().getFilesDir().getAbsolutePath(), dirNameReturn);
+        if (potentialPaintingDir.setWritable(true, false)) {
+            Log.e("setwriet", "succeeded");
+        }
         if (potentialPaintingDir.exists())
             return null;
         else {
@@ -137,11 +154,11 @@ public class NewPaintingActivity extends AppCompatActivity {
         if (potentialPaintingDir == null) {
             Toast.makeText(this, "A Painting Already has this Name!", Toast.LENGTH_LONG).show();
         }
-        if (createPaintingDir(paintingName, potentialPaintingDir)) {
+        if (!createPaintingDir(paintingName, potentialPaintingDir)) {
             Log.e("NewPaintingActivity", "failed to createPaintingFile");
         }
         Intent intent = new Intent(NewPaintingActivity.this, MainActivity.class);
-        intent.putExtra(getString(R.string.painting_to_load), potentialPaintingDir.getName());
+        intent.putExtra(getString(R.string.painting_to_load), potentialPaintingDir.getAbsolutePath());
         startActivity(intent);
     }
 

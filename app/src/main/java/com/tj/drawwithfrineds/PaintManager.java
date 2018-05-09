@@ -116,7 +116,7 @@ public class PaintManager {
         this.projectDir = new File(projectDir);
 
         // TODO wait till no more events for last file
-        configFile = new File(projectDir + File.pathSeparator + "config");
+        configFile = new File(projectDir, "config");
         try {
             Scanner sr = new Scanner(configFile);
             if (sr.hasNextLine()) {
@@ -126,11 +126,11 @@ public class PaintManager {
                 Log.e("openProject", "reading config file error");
             }
         } catch (Exception e) {
-            Log.e("openProject", "reading config file error");
+            Log.e("openProject", "reading config file error" + e.getMessage());
         }
 
-        localPaintFile = new File(projectDir + File.pathSeparator + "local");
-        globalPaintFile = new File(projectDir + File.pathSeparator + "global");
+        localPaintFile = new File(projectDir, "local");
+        globalPaintFile = new File(projectDir,"global");
     }
 
     public File getProjectDir() { return projectDir; }
