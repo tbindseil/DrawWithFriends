@@ -154,11 +154,11 @@ public class PaintManager {
                 threadControl.execute(new PaintWorker(update));
                 break;
             case BitmapUpdateMessage.BITMAP_SAVE_REQUEST:
-                while (threadControl.isQuiescent()) {
+                while (!threadControl.isQuiescent()) {
                     // do nothing
                 }
                 threadControl.execute(new PaintWorker(update));
-                while (threadControl.isQuiescent()) {
+                while (!threadControl.isQuiescent()) {
                     // do nothing
                 }
                 break;
