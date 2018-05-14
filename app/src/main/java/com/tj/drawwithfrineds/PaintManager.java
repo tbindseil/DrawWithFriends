@@ -113,6 +113,7 @@ public class PaintManager {
     }
 
     public void openProject(String projectDir) {
+        Log.e("paintmangaer", "projectdir is " + projectDir);
         this.projectDir = new File(projectDir);
 
         // TODO wait till no more events for last file
@@ -130,6 +131,7 @@ public class PaintManager {
         }
 
         localPaintFile = new File(projectDir, "local");
+        Log.e("paintmanager", "localpaintfile name is " + localPaintFile.getAbsolutePath());
         globalPaintFile = new File(projectDir,"global");
     }
 

@@ -2,6 +2,7 @@ package com.tj.drawwithfrineds;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -33,6 +34,7 @@ import com.tj.drawwithfrineds.UpdateMessage.SaveUpdateMessage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,9 +141,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_clear:
-                ImageView frontCanvas = findViewById(R.id.frontcanvas);
+                try {
+                    FileOutputStream f = new FileOutputStream(PaintManager.getInstance().getLocalPaintFile());
+                    File publicFile = new File(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "localpic.png");
+                    FileInputStream in = new FileInputStream(publicFile);
+                    byte[] data = new byte[in.available()];
+                    in.read(data);
+                    f.write(data);
+                    in.close();
+                    f.close();
+                } catch (Exception e) {
+                    Log.e("fakesave", "error " + e.getMessage());
+                }
+
+
+                /*ImageView frontCanvas = findViewById(R.id.frontcanvas);
                 ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas);
-                PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
+                PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);*/
                 break;
             case R.id.action_set:
                 Log.e("menuhandler", "set button pressed");

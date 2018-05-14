@@ -11,6 +11,8 @@ import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,7 +170,7 @@ class PaintWorker implements Runnable {
                 if (backPicture != null) {
                     Log.e("SAVEDRAW", "just got local pic");
                     for (int i = 0; i < colorsToDisplay.length; i++) {
-                        if (!((colorsToDisplay[i] & 0xFF000000) == 0xFF)) {
+                        if (colorsToDisplay[i] == 0) {
                             colorsToDisplay[i] = backPicture[i];
                         }
                     }
@@ -184,10 +186,18 @@ class PaintWorker implements Runnable {
                 FileOutputStream out = null;
                 try {
                     Log.e("SAVE_DRAW", "filename is " + PaintManager.getInstance().getLocalPaintFile().getAbsolutePath());
+                    Log.e("SAVE_DRAW", "can write?? " + PaintManager.getInstance().getLocalPaintFile().canWrite());
                     if (PaintManager.getInstance().getLocalPaintFile().exists()) {
                         PaintManager.getInstance().getLocalPaintFile().delete();
                     }
+                    PaintManager.getInstance().getLocalPaintFile().createNewFile();
+
                     out = new FileOutputStream(PaintManager.getInstance().getLocalPaintFile());
+                    /*ByteBuffer bb = ByteBuffer.allocate(colorsToDisplay.length * 4);
+                    IntBuffer ib = bb.asIntBuffer();
+                    ib.put(colorsToDisplay);
+                    byte[] data = bb.array();
+                    out.write(data);*/
                     toDisplay.compress(Bitmap.CompressFormat.PNG, 100, out);
                     out.close();
                 } catch (Exception e) {
