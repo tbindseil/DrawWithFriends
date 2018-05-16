@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +17,10 @@ import java.io.File;
 import java.io.FileReader;
 
 public class ListPaintingsActivity extends AppCompatActivity {
+
+    public void onPaintingSelected(View view) {
+
+    }
 
     private void displayPaintings() {
         File[] allProjects = this.getApplicationContext().getFilesDir().listFiles();
@@ -25,8 +31,17 @@ public class ListPaintingsActivity extends AppCompatActivity {
         for (int i = 0; i < allProjects.length; i++) {
             Log.e("ListPaintingsActivity", "i is " + i + " and allProjects[i].getNAme() is " + allProjects[i].getName());
             String currProjectTitle = allProjects[i].getName();
-            TextView curr = new TextView(this.getApplicationContext());
+            Button curr = new PaintingButton(this.getApplicationContext(), allProjects[i]);
             curr.setText(currProjectTitle);
+            curr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ListPaintingsActivity.this, MainActivity.class);
+                    intent.putExtra(getString(R.string.painting_to_load), ((PaintingButton)view).getPaintingDir().getAbsolutePath());
+                    startActivity(intent);
+                }
+            });
+
             ll.addView(curr);
         }
     }
