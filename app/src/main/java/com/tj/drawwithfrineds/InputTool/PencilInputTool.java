@@ -5,12 +5,12 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 
 import com.tj.drawwithfrineds.R;
 import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
+import com.tj.drawwithfrineds.StateSavingSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,22 +28,9 @@ public class PencilInputTool extends InputTool {
     private List<ScreenCord> lastPoints;
 
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
-        RadioGroup thicknessGroup = toolSelectActRef.findViewById(R.id.thickness_group);
-        int thicknessChecked = thicknessGroup.getCheckedRadioButtonId();
-        switch (thicknessChecked) {
-            case R.id.thinButton:
-                thickness = THICKNESS_THIN;
-                break;
-            case R.id.mediumButton:
-                thickness = THICKNESS_MEDIUM;
-                break;
-            case R.id.thickButton:
-                thickness = THICKNESS_THICK;
-                break;
-            default:
-                thickness = THICKNESS_MEDIUM;
-                break;
-        }
+        StateSavingSeekBar thicknessBar = toolSelectActRef.findViewById(R.id.thicknessSeekBar);
+        thickness = thicknessBar.getLastSet();
+        Log.e("PencilInputTool", "thickness is " + thickness);
 
         lastPoints = new ArrayList<>();
     }

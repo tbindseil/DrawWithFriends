@@ -26,7 +26,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tool_selection);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ToolSelectionActivityTitle);
         setSupportActionBar(myToolbar);
 
