@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String paintingTitle;
 
+    // TODO upon relaunching of mainact from toolselectact, we must show whats on the forground of paintmanager
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,23 +142,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_clear:
-                try {
-                    FileOutputStream f = new FileOutputStream(PaintManager.getInstance().getLocalPaintFile());
-                    File publicFile = new File(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "localpic.png");
-                    FileInputStream in = new FileInputStream(publicFile);
-                    byte[] data = new byte[in.available()];
-                    in.read(data);
-                    f.write(data);
-                    in.close();
-                    f.close();
-                } catch (Exception e) {
-                    Log.e("fakesave", "error " + e.getMessage());
-                }
-
-
-                /*ImageView frontCanvas = findViewById(R.id.frontcanvas);
+                ImageView frontCanvas = findViewById(R.id.frontcanvas);
                 ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas);
-                PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);*/
+                PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 break;
             case R.id.action_set:
                 Log.e("menuhandler", "set button pressed");
