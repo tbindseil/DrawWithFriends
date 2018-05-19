@@ -103,6 +103,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.tj.drawwithfrineds.UpdateMessage.PencilShowView
+            android:id="@+id/dotView"
+            android:layout_width="118dp"
+            android:layout_height="108dp"
+            android:layout_marginStart="248dp"
+            android:layout_marginTop="324dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:color/background_light" />
+
         <com.tj.drawwithfrineds.StateSavingSeekBar
             android:id="@+id/thicknessSeekBar"
             android:layout_width="match_parent"

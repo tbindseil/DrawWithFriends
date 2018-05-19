@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.tj.drawwithfrineds.InputTool.PencilInputTool;
 import com.tj.drawwithfrineds.InputTool.QuadrantInputTool;
 import com.tj.drawwithfrineds.InputTool.RandomInputTool;
 import com.tj.drawwithfrineds.InputTool.ViewOnlyInputTool;
+import com.tj.drawwithfrineds.UpdateMessage.PencilShowView;
 
 public class ToolSelectionActivity extends AppCompatActivity {
     private int selectedInput;
@@ -59,6 +61,9 @@ public class ToolSelectionActivity extends AppCompatActivity {
                                 break;
                             case (R.id.pencilButton):
                                 findViewById(R.id.pencil_configuration).setVisibility(visibility);
+                                if (visibility == View.VISIBLE) {
+                                    ((StateSavingSeekBar)findViewById(R.id.thicknessSeekBar)).addToToTell((PencilShowView)findViewById(R.id.dotView));
+                                }
                                 if (setInputTool) selectedInput = InputTool.PENCIL;
                                 break;
                             case (R.id.randomButton):
