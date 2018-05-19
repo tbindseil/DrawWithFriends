@@ -70,7 +70,6 @@ class PaintWorker implements Runnable {
             toRet.add(last);
         } while (true);
             //} while (!opt1.equals(c2) && !opt2.equals(c2));
-        Log.e("recursive", "points in this message is " + toRet.size());
     }
 
     private void connectTheDotsRecursive(CanvasCord c1, CanvasCord c2, List<CanvasCord> toRet) {
@@ -124,12 +123,10 @@ class PaintWorker implements Runnable {
                 // only apply color to points that are relevant given the delta
                 int sizeBeforeThickness = canvasCords.size();
                 thickness = thickness / 2;
-                Log.e("PaintWorker", "sizeBeforeThickness is " + sizeBeforeThickness);
                 for (int i = 0; i < sizeBeforeThickness; i++) {
                     // TODO canvas is no longer needed i believe
                     int x = canvasCords.get(i).x;
                     int y = canvasCords.get(i).y;
-                    Log.e("PaintWorker", "expanding point x,y " + x + ", " + y);
                     // wow such algo... maybe a hash????
                     for (int j = 0 - thickness; j < thickness; j++) {
                         for (int k = 0 - thickness; k < thickness; k++) {

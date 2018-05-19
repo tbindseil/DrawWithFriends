@@ -52,7 +52,7 @@ public class PencilShowView extends AppCompatImageView implements SlideUpdate {
                 break;
             case R.id.colorSeekBar:
                 // todo settable max
-                Log.e("PencilShowView", "color is" + color);
+                Log.e("PencilShowView", "color is" + Integer.toHexString(color));
                 float scale = pos / 100f;
                 color = 0xff000000 + (int)(scale * 0x00ffffff);
                 break;
