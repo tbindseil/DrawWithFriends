@@ -63,6 +63,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
                                 findViewById(R.id.pencil_configuration).setVisibility(visibility);
                                 if (visibility == View.VISIBLE) {
                                     ((StateSavingSeekBar)findViewById(R.id.thicknessSeekBar)).addToToTell((PencilShowView)findViewById(R.id.dotView));
+                                    ((StateSavingSeekBar)findViewById(R.id.colorSeekBar)).addToToTell((PencilShowView)findViewById(R.id.dotView));
                                 }
                                 if (setInputTool) selectedInput = InputTool.PENCIL;
                                 break;

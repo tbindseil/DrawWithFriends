@@ -10,13 +10,15 @@ import android.util.Log;
 
 import com.tj.drawwithfrineds.SlideUpdate;
 import com.tj.drawwithfrineds.StateSavingSeekBar;
+import com.tj.drawwithfrineds.R;
 
 /**
  * Created by TJ on 5/19/2018.
  */
 
 public class PencilShowView extends AppCompatImageView implements SlideUpdate {
-    private int slidePos = 1;
+    private int thickness = 1;
+    private int color = 0xff000000;
 
     public PencilShowView (Context context) {
         super(context);
@@ -38,13 +40,23 @@ public class PencilShowView extends AppCompatImageView implements SlideUpdate {
         super.onDraw(canvas);
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.RED);
-        canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, slidePos, paint);
+        paint.setColor(color);
+        canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, thickness, paint);
     }
 
     @Override
-    public void receiveSlidePosition(int pos) {
-        slidePos = pos;
+    public void receiveSlidePosition(int pos, int from) {
+        switch (from) {
+            case R.id.thicknessSeekBar:
+                thickness = pos;
+                break;
+            case R.id.colorSeekBar:
+                // todo settable max
+                Log.e("PencilShowView", "color is" + color);
+                float scale = pos / 100f;
+                color = 0xff000000 + (int)(scale * 0x00ffffff);
+                break;
+        }
         invalidate();
     }
 }

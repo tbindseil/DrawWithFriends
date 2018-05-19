@@ -117,6 +117,7 @@ class PaintWorker implements Runnable {
                     Log.e("PaintWorker","canvascords.size is off");
                 }
                 int thickness = castedTask.getThickness();
+                int color = castedTask.getColor();
 // TODO no need for canvas cords, just fill in the spots in the array
                 // TODO sort points before expansion
                 // measure the delta from prev point
@@ -137,7 +138,7 @@ class PaintWorker implements Runnable {
                             int offset = (canvas.getWidth() * currY) + currX;
                             if (offset < colorsToDisplay.length && offset >= 0) {
                                 // TODO colors
-                                colorsToDisplay[offset] = 0xffff0000;
+                                colorsToDisplay[offset] = color;
                             }
                         }
                     }

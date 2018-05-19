@@ -24,13 +24,18 @@ public class PencilInputTool extends InputTool {
     public static final int THICKNESS_MEDIUM = 64;
     public static final int THICKNESS_THICK = 128;
     private int thickness;
+    private int color;
 
     private List<ScreenCord> lastPoints;
 
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
         StateSavingSeekBar thicknessBar = toolSelectActRef.findViewById(R.id.thicknessSeekBar);
         thickness = thicknessBar.getLastSet();
-        Log.e("PencilInputTool", "thickness is " + thickness);
+
+        StateSavingSeekBar colorBar = toolSelectActRef.findViewById(R.id.colorSeekBar);
+        int pos = colorBar.getLastSet();
+        float scale = pos / 100f;
+        color = 0xff000000 + (int)(scale * 0x00ffffff);
 
         lastPoints = new ArrayList<>();
     }
@@ -46,7 +51,7 @@ public class PencilInputTool extends InputTool {
         int pointerCount = ev.getPointerCount();
         PencilUpdateMessage updates[] = new PencilUpdateMessage[pointerCount];
         for (int i = 0; i < pointerCount; i++) {
-            updates[i] = new PencilUpdateMessage(canvas, thickness);
+            updates[i] = new PencilUpdateMessage(canvas, thickness, color);
         }
 
         // TODO checkout addBatch

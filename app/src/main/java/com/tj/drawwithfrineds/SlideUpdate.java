@@ -5,5 +5,5 @@ package com.tj.drawwithfrineds;
  */
 
 public interface SlideUpdate {
-    public void receiveSlidePosition(int pos);
+    public void receiveSlidePosition(int pos, int from);
 }

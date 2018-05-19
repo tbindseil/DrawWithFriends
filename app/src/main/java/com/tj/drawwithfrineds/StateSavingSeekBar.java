@@ -25,7 +25,7 @@ public class StateSavingSeekBar extends AppCompatSeekBar {
                 Log.e("StateSavingSeekBar", "last set is now " + i);
                 ((StateSavingSeekBar)seekBar).setLastSet(i);
                 for (SlideUpdate su : toTell) {
-                    if (su != null) { su.receiveSlidePosition(i); }
+                    if (su != null) { su.receiveSlidePosition(i, seekBar.getId()); }
                 }
             }
 
@@ -49,7 +49,7 @@ public class StateSavingSeekBar extends AppCompatSeekBar {
                 Log.e("StateSavingSeekBar", "last set is now " + i);
                 ((StateSavingSeekBar)seekBar).setLastSet(i);
                 for (SlideUpdate su : toTell) {
-                    if (su != null) { su.receiveSlidePosition(i); }
+                    if (su != null) { su.receiveSlidePosition(i, seekBar.getId()); }
                 }
             }
 
@@ -73,7 +73,7 @@ public class StateSavingSeekBar extends AppCompatSeekBar {
                 Log.e("StateSavingSeekBar", "last set is now " + i);
                 ((StateSavingSeekBar)seekBar).setLastSet(i);
                 for (SlideUpdate su : toTell) {
-                    if (su != null) { su.receiveSlidePosition(i); }
+                    if (su != null) { su.receiveSlidePosition(i, seekBar.getId()); }
                 }
             }
 
