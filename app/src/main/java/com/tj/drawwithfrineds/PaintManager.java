@@ -192,8 +192,8 @@ public class PaintManager {
 
     public int[] getLocalPic(ImageView i) {
         Log.e("getLocalPic", "calling getlocalpic");
-        if (localPaintFile.exists()) {
-            Bitmap toLoad = BitmapFactory.decodeFile(localPaintFile.getAbsolutePath());
+        Bitmap toLoad = BitmapFactory.decodeFile(localPaintFile.getAbsolutePath());
+        if (toLoad != null) {
             backPicture = new int[i.getHeight() * i.getWidth()];
             toLoad.getPixels(backPicture, 0, i.getWidth(), 0, 0, i.getWidth(), i.getHeight());
             return backPicture;
