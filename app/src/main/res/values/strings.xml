@@ -46,4 +46,39 @@
     <string name="view_only_tool">View Only</string>
     <string name="pencil_tool">Pencil</string>
     <!-- End of Strings for tool names -->
+
+
+    <string name="opt_image">image</string>
+    <string name="opt_edit">edit</string>
+    <string name="opt_dig">dig</string>
+    <string name="opt_select">select</string>
+    <string name="opt_draw">draw</string>
+    <string name="opt_cut">cut</string>
+    <string name="opt_shape">shape</string>
+    <string name="opt_pencil">pencil</string>
+    <string name="opt_polygon">polygon</string>
+    <string name="opt_numSides">numSides</string>
+    <string name="opt_conrnerRound">conrnerRound</string>
+    <string name="opt_fill">fill</string>
+    <string name="opt_free">free</string>
+    <string name="opt_straight">straight</string>
+    <string name="opt_color">color</string>
+    <string name="opt_texture">texture</string>
+    <string name="opt_any">any</string>
+    <string name="opt_yes">yes</string>
+    <string name="opt_no">no</string>
+
+    <string name="optintid_initial">initial</string>
+    <string name="optintid_select">select</string>
+    <string name="optintid_draworcut">draworcut</string>
+    <string name="optintid_shapeorpencil">shapeorpencil</string>
+    <string name="optintid_numsides">numsides</string>
+    <string name="optintid_cornerround">cornerRound</string>
+    <string name="optintid_fill">fill</string>
+    <string name="optintid_freeorstraight">freeorstraight</string>
+    <string name="optintid_thickness">thickness</string>
+    <string name="optintid_color">color</string>
+    <string name="optintid_texture">textrue</string>
+    <string name="optintid_fin">fin</string>
+ 
 </resources>
