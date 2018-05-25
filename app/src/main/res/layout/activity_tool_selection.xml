@@ -15,6 +15,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
+    <!-- Everything below this will be removed -->
 
     <LinearLayout
         android:id="@+id/optionsLayout"
@@ -126,7 +127,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:color/background_light" />
 
-        <com.tj.drawwithfrineds.ToolOptionsSlider
+        <com.tj.drawwithfrineds.ToolOptionsViewSlider
             android:id="@+id/thicknessSeekBar"
             android:layout_width="match_parent"
             android:layout_height="67dp"
@@ -135,7 +136,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.tj.drawwithfrineds.ToolOptionsSlider
+        <com.tj.drawwithfrineds.ToolOptionsViewSlider
             android:id="@+id/colorSeekBar"
             android:layout_width="match_parent"
             android:layout_height="67dp"

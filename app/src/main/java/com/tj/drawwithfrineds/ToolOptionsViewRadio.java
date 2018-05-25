@@ -4,29 +4,33 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 
 /**
  * Created by TJ on 5/19/2018.
  */
 
 // this is basically just so i get my hashmap
-public class ToolOptionsRadio extends ToolConfigOptions {
+public class ToolOptionsViewRadio extends ToolConfigOptionsView {
     private RadioGroup options;
 
-    public ToolOptionsRadio(Context context) {
+    @Override
+    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
+        // todo
+    }
+
+    public ToolOptionsViewRadio(Context context) {
         super(context);
     }
 
-    public ToolOptionsRadio(Context context, AttributeSet attrs) {
+    public ToolOptionsViewRadio(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ToolOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ToolOptionsViewRadio(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public ToolOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ToolOptionsViewRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

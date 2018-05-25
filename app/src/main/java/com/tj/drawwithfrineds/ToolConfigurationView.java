@@ -6,21 +6,31 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * Created by TJ on 5/19/2018.
  */
 @TargetApi(24)
-public class ToolConfigurationView extends View {
-    public Map<String, ToolConfigOptions> optionInterfaces = new HashMap<String, ToolConfigOptions>();
+public class ToolConfigurationView extends LinearLayout {
+    private ToolConfigOptionsView curr;
+
+    public Map<String, ToolConfigOptionsView> optionToNextConfig = new HashMap<String, ToolConfigOptionsView>();
+    public Stack<ToolConfigOptionsView> configStack = new Stack<>();
+
+    private NextButtonHandler nextHandler;
+    private RevertButtonHandler revertHandler;
 
     public ToolConfigurationView(Context context) {
         super(context);
@@ -46,88 +56,149 @@ public class ToolConfigurationView extends View {
      * this is where the option linking happens, its hard coded, deal with it
      */
     private void constructOptions() {
-        ToolConfigOptions curr;
+        setOrientation(LinearLayout.VERTICAL);
 
-        // initialoptintid_select
-        curr = new ToolOptionsRadio(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_image), this.getContext().getString(R.string.optintid_select));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_edit), this.getContext().getString(R.string.optintid_draworcut));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_dig), this.getContext().getString(R.string.optintid_thickness)); // this will be like scrubbing away layers, not inmplemented yet
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_initial), curr);
-        ToolOptionsRadio initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        nextHandler = new NextButtonHandler(this);
+        revertHandler = new RevertButtonHandler(this);
 
-        curr = new ToolOptionsSelectImage(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fin));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_select), curr);
+        ToolConfigOptionsView beingInitialized;
 
-        curr = new ToolOptionsRadio(this.getContext());
-        ToolConfigOptions tco = (ToolConfigOptions) curr;
-        if (tco.optionToIdMap.isEmpty()) {
-            Log.e("ToolConfigurationView", "contents of map are empty");
-        }
-        else {
-            Set<String> contents = tco.optionToIdMap.keySet();
-            for (String s: contents) {
-                Log.e("ToolConfiguratinoView", "string is " + s);
-            }
-        }
-        curr.optionToIdMap.clear(); // TODO why do i need this
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_draw), this.getContext().getString(R.string.optintid_shapeorpencil));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_cut), this.getContext().getString(R.string.optintid_shapeorpencil));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_draworcut), curr);
-        initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_image), this.getContext().getString(R.string.optintid_select));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_edit), this.getContext().getString(R.string.optintid_draworcut));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_dig), this.getContext().getString(R.string.optintid_thickness)); // this will be like scrubbing away layers, not inmplemented yet
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("initial");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_initial), beingInitialized);
 
-        curr = new ToolOptionsRadio(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_pencil), this.getContext().getString(R.string.optintid_freeorstraight));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_shape), this.getContext().getString(R.string.optintid_numsides));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_shapeorpencil), curr);
-        initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        beingInitialized = new ToolOptionsViewSelectImage(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fin));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("select");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_select), beingInitialized);
 
-        curr = new ToolOptionsRadio(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_free), this.getContext().getString(R.string.optintid_thickness));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_straight), this.getContext().getString(R.string.optintid_thickness));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_freeorstraight), curr);
-        initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.clear(); // TODO why do i need this
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_draw), this.getContext().getString(R.string.optintid_shapeorpencil));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_cut), this.getContext().getString(R.string.optintid_shapeorpencil));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("draworcut");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_draworcut), beingInitialized);
 
-        curr = new ToolOptionsSlider(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_color));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_thickness), curr);
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_pencil), this.getContext().getString(R.string.optintid_freeorstraight));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_shape), this.getContext().getString(R.string.optintid_numsides));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("shapeorpencil");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_shapeorpencil), beingInitialized);
 
-        curr = new ToolOptionsSpinner(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_cornerround));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_numsides), curr);
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_free), this.getContext().getString(R.string.optintid_thickness));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_straight), this.getContext().getString(R.string.optintid_thickness));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("freeorstraight");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_freeorstraight), beingInitialized);
 
-        curr = new ToolOptionsSlider(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fill));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_cornerround), curr);
+        beingInitialized = new ToolOptionsViewSlider(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_color));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("thickness");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_thickness), beingInitialized);
 
-        curr = new ToolOptionsRadio(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_yes), this.getContext().getString(R.string.optintid_color));
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_no), this.getContext().getString(R.string.optintid_thickness));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_fill), curr);
-        initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        beingInitialized = new ToolOptionsViewSpinner(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_cornerround));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("numsides");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_numsides), beingInitialized);
 
-        curr = new ToolOptionsSlider(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_texture));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_color), curr);
+        beingInitialized = new ToolOptionsViewSlider(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fill));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("cornerround");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_cornerround), beingInitialized);
 
-        curr = new ToolOptionsRadio(this.getContext());
-        curr.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fin));
-        optionInterfaces.put(this.getContext().getString(R.string.optintid_texture), curr);
-        initialRadio = (ToolOptionsRadio)curr;
-        initialRadio.createRadioGroupFromKeySet();
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_yes), this.getContext().getString(R.string.optintid_color));
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_no), this.getContext().getString(R.string.optintid_thickness));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("fill");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_fill), beingInitialized);
+
+        beingInitialized = new ToolOptionsViewSlider(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_texture));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("color");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_color), beingInitialized);
+
+        beingInitialized = new ToolOptionsViewRadio(this.getContext());
+        beingInitialized.optionToIdMap.put(this.getContext().getString(R.string.opt_any), this.getContext().getString(R.string.optintid_fin));
+        beingInitialized.init();
+        beingInitialized.setConfigOptionsName("texture");
+        optionToNextConfig.put(this.getContext().getString(R.string.optintid_texture), beingInitialized);
+
+        curr = optionToNextConfig.get("initial");
+        addView(curr);
     }
 
-    public ToolOptionsRadio getInitialOptions() {
-        return (ToolOptionsRadio) optionInterfaces.get(this.getContext().getString(R.string.optintid_initial));
+    @Override
+    public void onViewAdded(View child) {
+        // set curr to old handler, set new view to curr, set curr to currhandler
+        // this goes here ... configStack.push(curr);
+        if (!(child instanceof ToolConfigOptionsView)) {
+            Log.e("ToolConfigurationView", "view added thats not a ToolConfigOptionsView!");
+        }
+
+        ToolConfigOptionsView tcov = (ToolConfigOptionsView)child;
+
+        // as long as not first options set, set the current options set handler to old handler
+        if (curr != null) {
+            curr.setNotFirst().setOnClickListener(revertHandler);
+        }
+
+        configStack.push(tcov);
+        tcov.setFirst().setOnClickListener(nextHandler);
+    }
+
+    public void handleNext(ToolConfigOptionsView tcov) {
+        addView(optionToNextConfig.get(tcov.getSelectedOption()));
+    }
+
+    public void handleRevert(ToolConfigOptionsView tcov) {
+        // todo
     }
 }
 
+class NextButtonHandler implements Button.OnClickListener {
+    private ToolConfigurationView tcv;
+
+    public NextButtonHandler(ToolConfigurationView tcv) {
+        this.tcv = tcv;
+    }
+
+    @Override
+    public void onClick(View view) {
+        ViewParent parent = view.getParent();
+        if (!(parent instanceof ToolConfigOptionsView)) {
+            Log.e("RevertButtonHandler", "its not a ToolConfigOptionsView!");
+        }
+        tcv.handleNext((ToolConfigOptionsView)parent);
+    }
+}
+
+class RevertButtonHandler implements Button.OnClickListener {
+    private ToolConfigurationView tcv;
+
+    public RevertButtonHandler(ToolConfigurationView tcv) { this.tcv = tcv; }
+
+    @Override
+    public void onClick(View view) {
+        ViewParent parent = view.getParent();
+        if (!(parent instanceof ToolConfigOptionsView)) {
+            Log.e("RevertButtonHandler", "its not a ToolConfigOptionsView!");
+        }
+        tcv.handleRevert((ToolConfigOptionsView)parent);
+    }
+}
 /** 
  * INPUT CONFIG  _call this edit, then choose draw/cut
  * image draw/cut dig - (dig would be going back to old versions)--\

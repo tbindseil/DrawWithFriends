@@ -73,7 +73,7 @@
     <string name="optintid_draworcut">draworcut</string>
     <string name="optintid_shapeorpencil">shapeorpencil</string>
     <string name="optintid_numsides">numsides</string>
-    <string name="optintid_cornerround">cornerRound</string>
+    <string name="optintid_cornerround">cornerround</string>
     <string name="optintid_fill">fill</string>
     <string name="optintid_freeorstraight">freeorstraight</string>
     <string name="optintid_thickness">thickness</string>

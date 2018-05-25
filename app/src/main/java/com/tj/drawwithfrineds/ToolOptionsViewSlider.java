@@ -1,29 +1,23 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.SeekBar;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ToolOptionsViewSlider extends ToolConfigOptionsView {
 
-public class ToolOptionsSlider extends ToolConfigOptions {
-
-    public ToolOptionsSlider(Context context) {
+    public ToolOptionsViewSlider(Context context) {
         super(context);
     }
 
-    public ToolOptionsSlider(Context context, AttributeSet attrs) {
+    public ToolOptionsViewSlider(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ToolOptionsSlider(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ToolOptionsViewSlider(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public ToolOptionsSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ToolOptionsViewSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 }
