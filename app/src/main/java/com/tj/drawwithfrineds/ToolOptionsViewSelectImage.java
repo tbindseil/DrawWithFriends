@@ -7,7 +7,7 @@ import android.util.AttributeSet;
  * Created by TJ on 5/20/2018.
  */
 
-public class ToolOptionsViewSelectImage extends ToolConfigOptionsView {
+public class ToolOptionsViewSelectImage {}/*extends ToolConfigOptionsView {
     public ToolOptionsViewSelectImage(Context context) {
         super(context);
     }
@@ -19,4 +19,4 @@ public class ToolOptionsViewSelectImage extends ToolConfigOptionsView {
     public ToolOptionsViewSelectImage(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-}
+}*/

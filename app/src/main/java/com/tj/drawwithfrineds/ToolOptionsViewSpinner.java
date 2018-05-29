@@ -7,7 +7,7 @@ import android.util.AttributeSet;
  * Created by TJ on 5/20/2018.
  */
 
-public class ToolOptionsViewSpinner extends ToolConfigOptionsView {
+public class ToolOptionsViewSpinner { /*extends ToolConfigOptionsView {
     public ToolOptionsViewSpinner(Context context) {
         super(context);
     }
@@ -22,5 +22,5 @@ public class ToolOptionsViewSpinner extends ToolConfigOptionsView {
 
     public ToolOptionsViewSpinner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-    }
+    }*/
 }

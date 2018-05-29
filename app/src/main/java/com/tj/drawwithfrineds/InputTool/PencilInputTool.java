@@ -29,10 +29,10 @@ public class PencilInputTool extends InputTool {
     private List<ScreenCord> lastPoints;
 
     public PencilInputTool(ConstraintLayout configurationLayout, Activity toolSelectActRef) {
-        ToolOptionsViewSlider thicknessBar = toolSelectActRef.findViewById(R.id.thicknessSeekBar);
+        //ToolOptionsViewSlider thicknessBar = toolSelectActRef.findViewById(R.id.thicknessSeekBar);
         thickness = 5;//thicknessBar.getLastSet();
 
-        ToolOptionsViewSlider colorBar = toolSelectActRef.findViewById(R.id.colorSeekBar);
+        //ToolOptionsViewSlider colorBar = toolSelectActRef.findViewById(R.id.colorSeekBar);
         int pos = 5;//colorBar.getLastSet();
         float scale = pos / 100f;
         color = 0xff000000 + (int)(scale * 0x00ffffff);

@@ -10,7 +10,7 @@ import android.widget.RadioGroup;
  */
 
 // this is basically just so i get my hashmap
-public class ToolOptionsViewRadio extends ToolConfigOptionsView {
+public class ToolConfigOptionsRadio {/*} extends ToolConfigOptionsView {
     private RadioGroup options;
 
     @Override
@@ -18,19 +18,19 @@ public class ToolOptionsViewRadio extends ToolConfigOptionsView {
         // todo
     }
 
-    public ToolOptionsViewRadio(Context context) {
+    public ToolConfigOptionsRadio(Context context) {
         super(context);
     }
 
-    public ToolOptionsViewRadio(Context context, AttributeSet attrs) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ToolOptionsViewRadio(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public ToolOptionsViewRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -46,4 +46,4 @@ public class ToolOptionsViewRadio extends ToolConfigOptionsView {
     }
 
     public RadioGroup getOptions() { return options; }
-}
+*/}

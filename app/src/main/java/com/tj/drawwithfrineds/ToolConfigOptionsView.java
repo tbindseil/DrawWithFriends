@@ -2,6 +2,7 @@ package com.tj.drawwithfrineds;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,17 +18,22 @@ import java.util.Map;
  * Created by TJ on 5/19/2018.
  */
 
-public abstract class ToolConfigOptionsView extends ViewGroup { // should probably just extend viewgroup this is really the best i can do today...
-    public Map<String, String> optionToIdMap = new HashMap<>();
+public abstract class ToolConfigOptionsView extends ViewGroup {
+    private Map<String, ToolConfigOptionsView> optionToNextMap = new HashMap<>();
     private String selectedOption = "";
     private String configOptionsName;
 
-    private Button navButton;
-    private Button nextButton;
-    private Button revertButton;
+    protected Button navButton;
+
+    public static final int STATE_REMOVED = 0; // not needed anymore
+    public static final int STATE_FIRST = 1;
+    public static final int STATE_NOT_FIRST = 2;
+    private int state;
+
 
     public ToolConfigOptionsView(Context context) {
         super(context);
+        construct();
     }
 
     public ToolConfigOptionsView(Context context, AttributeSet attrs) {
@@ -36,20 +42,20 @@ public abstract class ToolConfigOptionsView extends ViewGroup { // should probab
 
     public ToolConfigOptionsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        construct();
     }
 
     public ToolConfigOptionsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        construct();
     }
 
     private void construct() {
-        nextButton = new Button(getContext());
-        nextButton.setText("Next");
-        revertButton = new Button(getContext());
-        revertButton.setText("Revert");
+        state = STATE_REMOVED;
+        navButton = new Button(this.getContext());
     }
 
-    public abstract void init();
+    public int getState() { return state; }
 
     public String getConfigOptionsName() { return configOptionsName; }
 
@@ -57,11 +63,30 @@ public abstract class ToolConfigOptionsView extends ViewGroup { // should probab
 
     public String getSelectedOption() { return selectedOption; }
 
-    public Button setFirst() {
-        return (navButton = nextButton);
+    public void setState(int state) {
+        switch (state) {
+            case STATE_REMOVED:
+                handleStateRemoved();
+                break;
+            case STATE_FIRST:
+                handleStateFirst();
+                break;
+            case STATE_NOT_FIRST:
+                handleStateNotFirst();
+                break;
+            default:
+                Log.e("ToolConfigOptionsView", "Invalid State!");
+                break;
+        }
     }
 
-    public Button setNotFirst() {
-        return (navButton = revertButton);
+    protected abstract void handleStateRemoved();
+    protected abstract void handleStateFirst();
+    protected abstract void handleStateNotFirst();
+
+    public abstract ToolConfigOptionsView getNext();
+
+    public void addOptions(String option, ToolConfigOptionsView next) {
+        optionToNextMap.put(option, next);
     }
 }

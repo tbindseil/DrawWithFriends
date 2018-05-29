@@ -3,7 +3,7 @@ package com.tj.drawwithfrineds;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class ToolOptionsViewSlider extends ToolConfigOptionsView {
+public class ToolOptionsViewSlider {/*extends ToolConfigOptionsView {
 
     public ToolOptionsViewSlider(Context context) {
         super(context);
@@ -19,7 +19,7 @@ public class ToolOptionsViewSlider extends ToolConfigOptionsView {
 
     public ToolOptionsViewSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-    }
+    }*/
 }
 
 /**

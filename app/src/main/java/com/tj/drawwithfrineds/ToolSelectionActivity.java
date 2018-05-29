@@ -1,21 +1,29 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.Toast;
+
+import java.util.Stack;
 
 public class ToolSelectionActivity extends AppCompatActivity {
-    private int selectedInput;
-    private ToolConfigurationView tcv;
+    public Stack<ToolConfigOptionsView> configStack = new Stack<>();
+    private LinearLayout configOptionsLayout;
+    private Button.OnClickListener navButtonHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +40,47 @@ public class ToolSelectionActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        tcv = new ToolConfigurationView(this);
-        ToolOptionsViewRadio initial = tcv.getInitialOptions();
-        RadioGroup initialRadioGroup = initial.getOptions();
-        initialRadioGroup.setOnCheckedChangeListener(new CurrentOptionsSelected(tcv));
-        LinearLayout ll = findViewById(R.id.optionsLayout);
-        ll.addView(initial);
+        navButtonHandler = new Button.OnClickListener() {
+            public void onClick(View view) {
+                ViewParent parent = view.getParent();
+                if (!(parent instanceof ToolConfigOptionsView)) {
+                    Log.e("RevertButtonHandler", "its not a ToolConfigOptionsView!");
+                }
+                ToolConfigOptionsView tcov = (ToolConfigOptionsView)parent;
+
+                switch (tcov.getState()) {
+                    case ToolConfigOptionsView.STATE_FIRST:
+                        ToolConfigOptionsView next = tcov.getNext();
+                        if (next == null) {
+                            // TODO how to get context here Toast.makeText(super.context, "not implemented yet", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            configStack.peek().setState(ToolConfigOptionsView.STATE_NOT_FIRST);
+                            configStack.push(next);
+                            configStack.peek().setState(ToolConfigOptionsView.STATE_FIRST);
+                        }
+                        break;
+                    case ToolConfigOptionsView.STATE_NOT_FIRST:
+                        String revertTo = tcov.getConfigOptionsName();
+                        while (!revertTo.equals(configStack.peek())) {
+                            configStack.pop();
+                        }
+                        configStack.peek().setState(ToolConfigOptionsView.STATE_FIRST);
+                        break;
+                    case ToolConfigOptionsView.STATE_REMOVED:
+                        Log.e("NavButtonHandler", "removed button pressed somehow");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        configOptionsLayout = findViewById(R.id.configLayout);
+        ToolConfigOptionsView first = new ToolConfigOptionsNOTDONEYET(this);
+        first.setState(ToolConfigOptionsView.STATE_FIRST);
+        first.navButton.setOnClickListener(navButtonHandler);
+        configStack.push(first);
+        configOptionsLayout.addView(first);
     }
 
     /**
@@ -60,7 +103,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.action_save:
-                intent.putExtra(getString(R.string.tool_select_intent), selectedInput);
+                intent.putExtra(getString(R.string.tool_select_intent), 0);
     //            loadConfiguredTool(intent);
                 startActivity(intent);
                 break;
