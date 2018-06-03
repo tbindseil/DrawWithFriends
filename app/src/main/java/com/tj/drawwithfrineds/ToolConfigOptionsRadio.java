@@ -12,8 +12,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by TJ on 5/19/2018.
@@ -71,14 +73,14 @@ public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
     }
 
     @Override
-    public ToolConfigOptionsView getNext() {
+    public String getNextName() {
         int checkedId = rg.getCheckedRadioButtonId();
 
         for (RadioButton rb: rbs) {
             if (rb.getId() == checkedId) {
-                return new ToolConfigOptionsNOTDONEYET(this.getContext());
+                return rb.getText().toString();
             }
         }
-        return null;
+        return "";
     }
 }

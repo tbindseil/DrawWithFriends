@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,6 +23,21 @@ import java.util.Map;
  */
 
 public abstract class ToolConfigOptionsView extends RelativeLayout {
+    // optionSet name, name of class of optionSet, list of options<|next optionSet>
+    private static String[][] options = {
+            {"Initial", "ToolConfigOptionsRadio", "Draw", "Cut", "Image", "Dig"},
+            {"Draw", "ToolConfigOptionsRadio", "Shape", "Pencil"},
+            {"Cut", "ToolConfigOptionsRadio", "Shape", "Pencil"},
+            {"Image", "ToolConfigOptionsSelect", "done"},
+            {"Shape", "ToolConfigOptionsSpinner", "CornerRound"},
+            {"CornerRound", "ToolConfigOptionsSlider", "Fill"},
+            {"Pencil", "ToolConfigOptionsRadio", "Free|Thickness", "Straight|Thickness"},
+            {"Fill", "ToolConfigOptionsRadio", "Yes|Color", "No|Thickness"},
+            {"Thickness", "ToolConfigOptionsSlider", "Color"},
+            {"Color", "ToolConfigOptionsSlider", "Texture"},
+            {"Texture", "ToolConfigOptionsRadio", "done"}
+    };
+
     private String configOptionsName;
 
     protected Button navButton;
@@ -63,9 +80,13 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
         this.addView(navButton);
     }
 
-    public int getState() { return state; }
+    public int getState() {
+        return state;
+    }
 
-    public String getConfigOptionsName() { return configOptionsName; }
+    public String getConfigOptionsName() {
+        return configOptionsName;
+    }
 
     public void setState(int state) {
         switch (state) {
@@ -86,10 +107,38 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
         state = STATE_FIRST;
         navButton.setText("next");
     }
+
     protected void handleStateNotFirst() {
         state = STATE_NOT_FIRST;
         navButton.setText("revert");
     }
 
-    public abstract ToolConfigOptionsView getNext();
+    public ToolConfigOptionsView getNext() {
+        String nextName = getNextName();
+        for (int i = 0; i < options.length; i++) {
+            if (options[i][0].equals(nextName)) {
+                String nextClass = "com.tj.drawwithfrineds." + options[i][1];
+                List<String> arg = new ArrayList<>();
+                for (int j = 2; j < options[i].length; j++) {
+                    arg.add(options[i][j]);
+                }
+
+                // crazy java stuff
+                ToolConfigOptionsView ret;
+                try {
+                    Class<?> clazz = Class.forName(nextClass);
+                    Constructor<?> constructor = clazz.getConstructor(Context.class, List.class);
+                    ret = (ToolConfigOptionsView)constructor.newInstance(new Object[] {this.getContext(), arg});
+                } catch (Exception e) {
+                    Log.e("getNext", "probably class not found");
+                    return null;
+                }
+                return ret;
+            }
+        }
+        Log.e("getNext", "invalid nextName");
+        return null;
+    }
+
+    public abstract String getNextName();
 }

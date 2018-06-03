@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import java.util.List;
+
 /**
  * Created by TJ on 5/26/2018.
  */
@@ -14,7 +16,7 @@ import android.widget.RelativeLayout;
 public class ToolConfigOptionsNOTDONEYET extends ToolConfigOptionsView {
     private EditText notDoneYetIndication;
 
-    public ToolConfigOptionsNOTDONEYET(Context context) {
+    public ToolConfigOptionsNOTDONEYET(Context context, List<String> options) {
         super(context);
         construct();
     }
@@ -56,7 +58,7 @@ public class ToolConfigOptionsNOTDONEYET extends ToolConfigOptionsView {
     }
 
     @Override
-    public ToolConfigOptionsView getNext() {
-        return null;
+    public String getNextName() {
+        return "";
     }
 }
