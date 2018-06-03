@@ -25,11 +25,11 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
 
     protected Button navButton;
 
-    public static final int STATE_REMOVED = 0; // not needed anymore
     public static final int STATE_FIRST = 1;
     public static final int STATE_NOT_FIRST = 2;
     private int state;
 
+    public static int DEFAULT_HEIGHT = 200;
 
     public ToolConfigOptionsView(Context context) {
         super(context);
@@ -38,6 +38,7 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
 
     public ToolConfigOptionsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        construct();
     }
 
     public ToolConfigOptionsView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -68,9 +69,6 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
 
     public void setState(int state) {
         switch (state) {
-            case STATE_REMOVED:
-                handleStateRemoved();
-                break;
             case STATE_FIRST:
                 handleStateFirst();
                 break;
@@ -81,15 +79,16 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
                 Log.e("ToolConfigOptionsView", "Invalid State!");
                 break;
         }
+        this.requestLayout();
     }
 
-    protected abstract void handleStateRemoved();
-    protected abstract void handleStateFirst();
-    protected abstract void handleStateNotFirst();
-
-    @Override
-    public void addView(View view) {
-        super.addView(view);
+    protected void handleStateFirst() {
+        state = STATE_FIRST;
+        navButton.setText("next");
+    }
+    protected void handleStateNotFirst() {
+        state = STATE_NOT_FIRST;
+        navButton.setText("revert");
     }
 
     public abstract ToolConfigOptionsView getNext();

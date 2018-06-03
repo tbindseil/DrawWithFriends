@@ -46,18 +46,13 @@ public class ToolConfigOptionsNOTDONEYET extends ToolConfigOptionsView {
     }
 
     @Override
-    protected void handleStateRemoved() {
-
-    }
-
-    @Override
     protected void handleStateFirst() {
-
+        super.handleStateFirst();
     }
 
     @Override
     protected void handleStateNotFirst() {
-
+        super.handleStateNotFirst();
     }
 
     @Override

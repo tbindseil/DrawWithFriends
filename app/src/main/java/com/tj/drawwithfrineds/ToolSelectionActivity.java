@@ -21,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
@@ -55,25 +57,23 @@ public class ToolSelectionActivity extends AppCompatActivity {
 
                 switch (tcov.getState()) {
                     case ToolConfigOptionsView.STATE_FIRST:
-                        ToolConfigOptionsView next = null;//tcov.getNext();
+                        ToolConfigOptionsView next = tcov.getNext();
                         if (next == null) {
                             // TODO how to get context here Toast.makeText(super.context, "not implemented yet", Toast.LENGTH_LONG).show();
                         }
                         else {
                             configStack.peek().setState(ToolConfigOptionsView.STATE_NOT_FIRST);
+                            next.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
                             configStack.push(next);
-                            configStack.peek().setState(ToolConfigOptionsView.STATE_FIRST);
+                            configOptionsLayout.addView(next);
                         }
                         break;
                     case ToolConfigOptionsView.STATE_NOT_FIRST:
-                        String revertTo = tcov.getConfigOptionsName();
-                        while (!revertTo.equals(configStack.peek())) {
-                            configStack.pop();
+                        while (!configStack.empty() && tcov != configStack.peek()) { //!revertTo.equals(configStack.peek())) {
+                            ToolConfigOptionsView curr = configStack.pop();
+                            configOptionsLayout.removeView(curr);
                         }
                         configStack.peek().setState(ToolConfigOptionsView.STATE_FIRST);
-                        break;
-                    case ToolConfigOptionsView.STATE_REMOVED:
-                        Log.e("NavButtonHandler", "removed button pressed somehow");
                         break;
                     default:
                         break;
@@ -81,12 +81,17 @@ public class ToolSelectionActivity extends AppCompatActivity {
             }
         };
         configOptionsLayout = (LinearLayout)findViewById(R.id.configLayout);
-        ToolConfigOptionsView first = new ToolConfigOptionsNOTDONEYET(this);
+        List<String> initialOptions = new ArrayList<>();
+        initialOptions.add("Image");
+        initialOptions.add("Draw");
+        initialOptions.add("Cut");
+        initialOptions.add("Dig");
+        ToolConfigOptionsView first = new ToolConfigOptionsRadio(this, initialOptions);
         first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         first.setState(ToolConfigOptionsView.STATE_FIRST);
         first.navButton.setOnClickListener(navButtonHandler);
         configStack.push(first);
-        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300));
+        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
         Log.e("ToolSelectionActivity", "configOptionsLayout.getId() is " + configOptionsLayout.getId());
         configOptionsLayout.addView(first);
     }
@@ -128,3 +133,28 @@ public class ToolSelectionActivity extends AppCompatActivity {
         String nextId = casted.optionToIdMap()*/
     }
 }
+
+/**
+ + * INPUT CONFIG  _call this edit, then choose draw/cut
+ + * image draw/cut dig - (dig would be going back to old versions)--\
+ + *   /     \\______                                              |
+ + * select   shape  pencil                                        |
+ + *         /           |                                         |
+ + *      polygon        |                                         |
+ + *        |            |                                         |
+ + *      numSides       |                                         |
+ + *        |            /-----\                                   |
+ + *      cornerRound   free   straight                            |
+ + *         |           |_______|                                |
+ + *      fill(fin cut)  |                                         |
+ + *      /  \           |                                         |
+ + *    yes  no          |                                         |
+ + *    /     \_        _|                                        /
+ + *    |        thickness --------------------------------------/
+ + *    |___     _/
+ + *        color
+ + *          |
+ + *        texture
+ + *
+ + * OUTPUT CONFIG... coming soon! spline!
+ + */
