@@ -145,7 +145,7 @@ public class NewPaintingActivity extends AppCompatActivity {
     }
 
     public void onFinishButtonClicked(View view) {
-        EditText paintingTitleEditText = findViewById(R.id.enterPaintingTitle);
+        EditText paintingTitleEditText = (EditText)findViewById(R.id.enterPaintingTitle);
         String paintingName = paintingTitleEditText.getText().toString();
         if (!isValidPaintingName(paintingName)) {
             Toast.makeText(this, "name must be made of a-z,A-Z, or _", Toast.LENGTH_LONG).show();

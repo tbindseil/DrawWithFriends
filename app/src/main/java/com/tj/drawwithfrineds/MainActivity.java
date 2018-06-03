@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         paintingTitle = PaintManager.getInstance().getProjectName();
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         // TODO give title its own line or in toolbar??
         myToolbar.setTitle(paintingTitle);
         setSupportActionBar(myToolbar);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         // display current tool in tool select button and
         // instantiate currInputTool
-        Button toolSelectButton = findViewById(R.id.toolSelectButton);
+        Button toolSelectButton = (Button)findViewById(R.id.toolSelectButton);
         int toolSelected = getIntent().getIntExtra(getString(R.string.tool_select_intent), 0);
         switch (toolSelected) {
             case InputTool.PENCIL:
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView backCanvas = findViewById(R.id.backcanvas);
+        ImageView backCanvas = (ImageView)findViewById(R.id.backcanvas);
         if (PaintManager.getInstance().getLocalPaintFile().exists()) {
             backCanvas.setImageURI(Uri.fromFile(PaintManager.getInstance().getLocalPaintFile()));
         } // else it defaults to white
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onWindowFocusChanged(boolean hasFocus) {
         // initialize picture
-        ImageView canvas = findViewById(R.id.frontcanvas);
+        ImageView canvas = (ImageView)findViewById(R.id.frontcanvas);
         PaintManager.getInstance().allocFrontPic(canvas); // TODO, this could probably be in a better spot
         // Log.e("onWindowFocusChanged", "filename is " + PaintManager.getInstance().getFile().getAbsolutePath());
         // BitmapUpdateMessage init = new InitUpdateMessage((ImageView) canvas);
@@ -142,13 +142,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_clear:
-                ImageView frontCanvas = findViewById(R.id.frontcanvas);
+                ImageView frontCanvas = (ImageView)findViewById(R.id.frontcanvas);
                 ClearUpdateMessage clearUpdateMessage = new ClearUpdateMessage(frontCanvas);
                 PaintManager.getInstance().handleState(clearUpdateMessage, BitmapUpdateMessage.BITMAP_UPDATE_REQUEST);
                 break;
             case R.id.action_set:
                 Log.e("menuhandler", "set button pressed");
-                ImageView backcanvas = findViewById(R.id.backcanvas);
+                ImageView backcanvas = (ImageView)findViewById(R.id.backcanvas);
                 SaveUpdateMessage update = new SaveUpdateMessage(backcanvas);
                 PaintManager.getInstance().handleState(update, BitmapUpdateMessage.BITMAP_SAVE_REQUEST);
                 break;

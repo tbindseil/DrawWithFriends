@@ -25,7 +25,7 @@ public class ListPaintingsActivity extends AppCompatActivity {
     private void displayPaintings() {
         File[] allProjects = this.getApplicationContext().getFilesDir().listFiles();
 
-        LinearLayout ll = findViewById(R.id.painting_list);
+        LinearLayout ll = (LinearLayout)findViewById(R.id.painting_list);
         BufferedReader in;
         Log.e("ListPaintingActivity", "allProjects.length is " + allProjects.length);
         for (int i = 0; i < allProjects.length; i++) {
@@ -50,7 +50,7 @@ public class ListPaintingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_paintings);
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ListPaintingsActivityTitle);
         setSupportActionBar(myToolbar);
 

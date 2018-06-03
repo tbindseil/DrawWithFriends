@@ -14,7 +14,7 @@ import com.tj.drawwithfrineds.R;
  * Created by TJ on 5/19/2018.
  */
 
-public class PencilShowView extends AppCompatImageView implements SlideUpdate {
+public class PencilShowView {}/*extends AppCompatImageView implements SlideUpdate {
     private int thickness = 1;
     private int color = 0xff000000;
 
@@ -58,3 +58,4 @@ public class PencilShowView extends AppCompatImageView implements SlideUpdate {
         invalidate();
     }
 }
+*/

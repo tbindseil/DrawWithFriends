@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
@@ -18,9 +20,7 @@ import java.util.Map;
  * Created by TJ on 5/19/2018.
  */
 
-public abstract class ToolConfigOptionsView extends ViewGroup {
-    private Map<String, ToolConfigOptionsView> optionToNextMap = new HashMap<>();
-    private String selectedOption = "";
+public abstract class ToolConfigOptionsView extends RelativeLayout {
     private String configOptionsName;
 
     protected Button navButton;
@@ -51,17 +51,20 @@ public abstract class ToolConfigOptionsView extends ViewGroup {
     }
 
     private void construct() {
-        state = STATE_REMOVED;
+        state = STATE_FIRST;
         navButton = new Button(this.getContext());
+        navButton.setText("next");
+        navButton.setId(View.generateViewId());
+        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        rlp.resolveLayoutDirection(LAYOUT_DIRECTION_LTR);
+        rlp.addRule(ALIGN_PARENT_START);
+        navButton.setLayoutParams(rlp);
+        this.addView(navButton);
     }
 
     public int getState() { return state; }
 
     public String getConfigOptionsName() { return configOptionsName; }
-
-    public void setConfigOptionsName(String name) { configOptionsName = name; }
-
-    public String getSelectedOption() { return selectedOption; }
 
     public void setState(int state) {
         switch (state) {
@@ -84,9 +87,10 @@ public abstract class ToolConfigOptionsView extends ViewGroup {
     protected abstract void handleStateFirst();
     protected abstract void handleStateNotFirst();
 
-    public abstract ToolConfigOptionsView getNext();
-
-    public void addOptions(String option, ToolConfigOptionsView next) {
-        optionToNextMap.put(option, next);
+    @Override
+    public void addView(View view) {
+        super.addView(view);
     }
+
+    public abstract ToolConfigOptionsView getNext();
 }

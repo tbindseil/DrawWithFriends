@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.Stack;
+
+import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 
 public class ToolSelectionActivity extends AppCompatActivity {
     public Stack<ToolConfigOptionsView> configStack = new Stack<>();
@@ -30,7 +35,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tool_selection);
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ToolSelectionActivityTitle);
         setSupportActionBar(myToolbar);
 
@@ -50,7 +55,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
 
                 switch (tcov.getState()) {
                     case ToolConfigOptionsView.STATE_FIRST:
-                        ToolConfigOptionsView next = tcov.getNext();
+                        ToolConfigOptionsView next = null;//tcov.getNext();
                         if (next == null) {
                             // TODO how to get context here Toast.makeText(super.context, "not implemented yet", Toast.LENGTH_LONG).show();
                         }
@@ -75,11 +80,14 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 }
             }
         };
-        configOptionsLayout = findViewById(R.id.configLayout);
+        configOptionsLayout = (LinearLayout)findViewById(R.id.configLayout);
         ToolConfigOptionsView first = new ToolConfigOptionsNOTDONEYET(this);
+        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         first.setState(ToolConfigOptionsView.STATE_FIRST);
         first.navButton.setOnClickListener(navButtonHandler);
         configStack.push(first);
+        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300));
+        Log.e("ToolSelectionActivity", "configOptionsLayout.getId() is " + configOptionsLayout.getId());
         configOptionsLayout.addView(first);
     }
 
