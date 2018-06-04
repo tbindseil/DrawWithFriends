@@ -6,11 +6,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import com.tj.drawwithfrineds.R;
 import com.tj.drawwithfrineds.ScreenCord;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 import com.tj.drawwithfrineds.UpdateMessage.PencilUpdateMessage;
-import com.tj.drawwithfrineds.ToolOptionsViewSlider;
 
 import java.util.ArrayList;
 import java.util.List;

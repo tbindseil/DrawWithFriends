@@ -1,6 +1,7 @@
 package com.tj.drawwithfrineds;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -23,26 +25,23 @@ import java.util.Map;
 
 public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
     private RadioGroup rg;
-    private List<RadioButton> rbs;
+    private List<ToolConfigOptionsRadioButton> rbs;
 
     public ToolConfigOptionsRadio(Context context, List<String> options) {
         super(context);
         construct(options);
     }
 
-    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, List<String> options) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs) {
         super(context, attrs);
-        construct(options);
     }
 
-    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr, List<String> options) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        construct(options);
     }
 
-    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes, List<String> options) {
+    public ToolConfigOptionsRadio(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        construct(options);
     }
 
     private void construct(List<String> options) {
@@ -52,8 +51,7 @@ public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
         rg.setOrientation(LinearLayout.HORIZONTAL);
         rbs = new ArrayList<>();
         for (String op: options) {
-            RadioButton rb = new RadioButton(this.getContext());
-            rb.setText(op);
+            ToolConfigOptionsRadioButton rb = new ToolConfigOptionsRadioButton(this.getContext(), op);
             rb.setId(View.generateViewId());
             rbs.add(rb);
             rg.addView(rb);
@@ -72,15 +70,46 @@ public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
         rg.clearCheck();
     }
 
+    protected void handleStateNotFirst() {
+        super.handleStateNotFirst();
+        // TODO do focus shit here so noone can fuck wid radio group once set , probably should be in parent class
+    }
+
     @Override
     public String getNextName() {
         int checkedId = rg.getCheckedRadioButtonId();
 
-        for (RadioButton rb: rbs) {
+        for (ToolConfigOptionsRadioButton rb: rbs) {
             if (rb.getId() == checkedId) {
-                return rb.getText().toString();
+                return rb.getNext();
             }
         }
         return "";
     }
+}
+
+class ToolConfigOptionsRadioButton extends AppCompatRadioButton {
+    private String next = "";
+    public ToolConfigOptionsRadioButton(Context context, String op) {
+        super(context);
+        if (op.contains("|")) {
+            String[] tokens = op.split("\\|");
+            this.setText(tokens[0]);
+            this.next = tokens[1];
+        }
+        else {
+            this.setText(op);
+            this.next = op;
+        }
+    }
+
+    public ToolConfigOptionsRadioButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public ToolConfigOptionsRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public String getNext() { return next; }
 }

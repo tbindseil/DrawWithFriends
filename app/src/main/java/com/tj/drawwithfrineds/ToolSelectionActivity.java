@@ -37,7 +37,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tool_selection);
 
-        Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle(R.string.ToolSelectionActivityTitle);
         setSupportActionBar(myToolbar);
 
@@ -53,19 +53,16 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 if (!(parent instanceof ToolConfigOptionsView)) {
                     Log.e("RevertButtonHandler", "its not a ToolConfigOptionsView!");
                 }
-                ToolConfigOptionsView tcov = (ToolConfigOptionsView)parent;
+                ToolConfigOptionsView tcov = (ToolConfigOptionsView) parent;
 
                 switch (tcov.getState()) {
                     case ToolConfigOptionsView.STATE_FIRST:
                         ToolConfigOptionsView next = tcov.getNext();
                         if (next == null) {
                             // TODO how to get context here Toast.makeText(super.context, "not implemented yet", Toast.LENGTH_LONG).show();
-                        }
-                        else {
+                        } else {
                             configStack.peek().setState(ToolConfigOptionsView.STATE_NOT_FIRST);
-                            next.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
-                            configStack.push(next);
-                            configOptionsLayout.addView(next);
+                            addToolConfigOption(next);
                         }
                         break;
                     case ToolConfigOptionsView.STATE_NOT_FIRST:
@@ -80,20 +77,23 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 }
             }
         };
-        configOptionsLayout = (LinearLayout)findViewById(R.id.configLayout);
+        configOptionsLayout = (LinearLayout) findViewById(R.id.configLayout);
         List<String> initialOptions = new ArrayList<>();
         initialOptions.add("Image");
         initialOptions.add("Draw");
         initialOptions.add("Cut");
         initialOptions.add("Dig");
         ToolConfigOptionsView first = new ToolConfigOptionsRadio(this, initialOptions);
-        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        first.setState(ToolConfigOptionsView.STATE_FIRST);
-        first.navButton.setOnClickListener(navButtonHandler);
-        configStack.push(first);
-        first.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
-        Log.e("ToolSelectionActivity", "configOptionsLayout.getId() is " + configOptionsLayout.getId());
-        configOptionsLayout.addView(first);
+        addToolConfigOption(first);
+    }
+
+    private void addToolConfigOption(ToolConfigOptionsView tcov) {
+        tcov.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        tcov.setState(ToolConfigOptionsView.STATE_FIRST);
+        tcov.navButton.setOnClickListener(navButtonHandler);
+        configStack.push(tcov);
+        tcov.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
+        configOptionsLayout.addView(tcov);
     }
 
     /**
