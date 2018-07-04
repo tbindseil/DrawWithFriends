@@ -88,6 +88,8 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
         return configOptionsName;
     }
 
+    public void setConfigOptionsName(String str) { configOptionsName = str; }
+
     public void setState(int state) {
         switch (state) {
             case STATE_FIRST:
@@ -129,6 +131,7 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
                     Class<?> clazz = Class.forName(nextClass);
                     Constructor<?> constructor = clazz.getConstructor(Context.class, List.class);
                     ret = (ToolConfigOptionsView)constructor.newInstance(new Object[] {this.getContext(), arg});
+                    ret.setConfigOptionsName(options[i][0]);
                 } catch (Exception e) {
                     Log.e("getNext", "probably class not found");
                     return null;

@@ -19,17 +19,20 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 
 public class ToolSelectionActivity extends AppCompatActivity {
     public Stack<ToolConfigOptionsView> configStack = new Stack<>();
     private LinearLayout configOptionsLayout;
+    TextView title;
     private Button.OnClickListener navButtonHandler;
 
     @Override
@@ -75,9 +78,17 @@ public class ToolSelectionActivity extends AppCompatActivity {
                     default:
                         break;
                 }
+
+                setTitle(configStack.peek().getConfigOptionsName());
             }
         };
         configOptionsLayout = (LinearLayout) findViewById(R.id.configLayout);
+
+        // add title
+        title = new TextView(this);
+        title.setText("Initial Options");
+        configOptionsLayout.addView(title);
+
         List<String> initialOptions = new ArrayList<>();
         initialOptions.add("Image");
         initialOptions.add("Draw");
@@ -131,6 +142,11 @@ public class ToolSelectionActivity extends AppCompatActivity {
         String selectedOption = view.text
         ToolConfigOptions casted = (ToolConfigOptions)view;
         String nextId = casted.optionToIdMap()*/
+    }
+
+    public void setTitle(String str) {
+        title.setText(str);
+        title.setGravity(CENTER_HORIZONTAL);
     }
 }
 
