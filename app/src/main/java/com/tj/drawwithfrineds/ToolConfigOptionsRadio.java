@@ -67,12 +67,16 @@ public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
     @Override
     protected void handleStateFirst() {
         super.handleStateFirst();
-        rg.clearCheck();
+        for (View v: rbs) {
+            v.setEnabled(true);
+        }
     }
 
     protected void handleStateNotFirst() {
         super.handleStateNotFirst();
-        // TODO do focus shit here so noone can fuck wid radio group once set , probably should be in parent class
+        for (View v: rbs) {
+            v.setEnabled(false);
+        }
     }
 
     @Override
