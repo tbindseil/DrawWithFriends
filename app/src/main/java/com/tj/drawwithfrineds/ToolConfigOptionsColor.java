@@ -119,15 +119,8 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
             }
         });
         seekBarLayout.addView(seekBarBlue);
-/* fuck this
-        sample = new ImageView(this.getContext());
-        RelativeLayout.LayoutParams slp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, ToolConfigOptionsView.DEFAULT_HEIGHT);
-        slp.addRule(BELOW, navButton.getId());
-        slp.resolveLayoutDirection(LAYOUT_DIRECTION_LTR);
-        slp.addRule(ALIGN_PARENT_START);
-        //slp.addRule(LEFT_OF, seekBarLayout.getId());
-        sample.setLayoutParams(slp);
-        this.addView(sample);*/
+
+        setBackgroundColor(0xff000000);
     }
 
     public ToolConfigOptionsColor(Context context, AttributeSet attrs) {
@@ -155,19 +148,6 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
         int red = seekPosRed & 0xff;
         int green = seekPosGreen & 0xff;
         int blue = seekPosBlue & 0xff;
-        /*Log.e("color", "sample width is " + sample.getWidth() + " and sample height is " + sample.getHeight());
-        int[] sampleColors = new int[sample.getWidth() * sample.getHeight()];
-        for (int i = 0; i < sampleColors.length; i++) {
-            sampleColors[i] = ((int)0xff) | ((int)(red << 24)) | ((int)(green << 16)) | ((int)(blue << 8));
-        }
-        sampleBmp = Bitmap.createBitmap(sampleColors, sample.getWidth(), sample.getHeight(), Bitmap.Config.ARGB_8888);
-        sample.setImageBitmap(sampleBmp);
-*/
-
-        Log.e("color", "color is " + String.format("0x%08x", ((int)0xff) | ((int)(red << 24)) | ((int)(green << 16)) | ((int)(blue << 8))));
-        Log.e("color", "Colro.red is "  + String.format("0x%08x", Color.RED));
-        Log.e("color", "Colro.green is "  + String.format("0x%08x", Color.GREEN));
-        Log.e("color", "Colro.blue is "  + String.format("0x%08x", Color.BLUE));
         setBackgroundColor(((int)(0xff << 24)) | ((int)(red << 16)) | ((int)(green << 8)) | ((int)(blue)));
         invalidate();
     }
@@ -175,10 +155,4 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
     public int getDefaultHeight() {
         return 3 * DEFAULT_HEIGHT;
     }
-
-    /*
-    private void allocSampleArray() {
-        if (frontPicture == null) {
-        frontPicture = new int[paintPad.getWidth() * paintPad.getHeight()];
-    }*/
 }
