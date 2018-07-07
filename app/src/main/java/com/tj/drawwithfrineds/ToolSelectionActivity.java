@@ -103,7 +103,7 @@ public class ToolSelectionActivity extends AppCompatActivity {
         tcov.setState(ToolConfigOptionsView.STATE_FIRST);
         tcov.navButton.setOnClickListener(navButtonHandler);
         configStack.push(tcov);
-        tcov.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ToolConfigOptionsView.DEFAULT_HEIGHT));
+        tcov.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, tcov.getDefaultHeight()));
         configOptionsLayout.addView(tcov);
     }
 

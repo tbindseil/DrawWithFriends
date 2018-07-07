@@ -34,7 +34,7 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
             {"Pencil", "ToolConfigOptionsRadio", "Free|Thickness", "Straight|Thickness"},
             {"Fill", "ToolConfigOptionsRadio", "Yes|Color", "No|Thickness"},
             {"Thickness", "ToolConfigOptionsSlider", "Color"},
-            {"Color", "ToolConfigOptionsSlider", "Texture"},
+            {"Color", "ToolConfigOptionsColor", "Texture"},
             {"Texture", "ToolConfigOptionsRadio", "done"}
     };
 
@@ -73,7 +73,7 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
         navButton = new Button(this.getContext());
         navButton.setText("next");
         navButton.setId(View.generateViewId());
-        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, DEFAULT_HEIGHT);
         rlp.resolveLayoutDirection(LAYOUT_DIRECTION_LTR);
         rlp.addRule(ALIGN_PARENT_START);
         navButton.setLayoutParams(rlp);
@@ -115,6 +115,11 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
         navButton.setText("revert");
     }
 
+    public int getDefaultHeight() {
+        return DEFAULT_HEIGHT;
+    }
+
+static boolean thingybopper = false;
     public ToolConfigOptionsView getNext() {
         String nextName = getNextName();
         for (int i = 0; i < options.length; i++) {
@@ -125,6 +130,13 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
                     arg.add(options[i][j]);
                 }
 
+// sorry folks.....
+if (nextClass.contains("ToolConfigOptionsColor")) {
+    ToolConfigOptionsView ret;
+    ret = new ToolConfigOptionsColor(this.getContext(), arg);
+    return ret;
+}
+
                 // crazy java stuff
                 ToolConfigOptionsView ret;
                 try {
@@ -134,6 +146,9 @@ public abstract class ToolConfigOptionsView extends RelativeLayout {
                     ret.setConfigOptionsName(options[i][0]);
                 } catch (Exception e) {
                     Log.e("getNext", "probably class not found");
+                    for (int j = 0; j < arg.size(); j++) {
+                        Log.e("getNext", "arg[" + j + "] is " + arg.get(j));
+                    }
                     return null;
                 }
                 return ret;
