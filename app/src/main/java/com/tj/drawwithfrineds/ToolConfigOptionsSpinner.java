@@ -18,6 +18,7 @@ import java.util.List;
 public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
     private String next = "";
 
+    TextView sides;
     private int numSides;
 
     private final int BUTTON_WIDTH = 300;
@@ -35,11 +36,20 @@ public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
         RelativeLayout.LayoutParams mblp = new RelativeLayout.LayoutParams(BUTTON_WIDTH, ToolConfigOptionsView.DEFAULT_HEIGHT);
         mblp.addRule(RIGHT_OF, navButton.getId());
         minusButton.setLayoutParams(mblp);
+        minusButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numSides > 3) {
+                    numSides--;
+
+                    sides.setText(String.valueOf(numSides));
+                }
+            }
+        });
         addView(minusButton);
 
-        TextView sides = new TextView(this.getContext());
+        sides = new TextView(this.getContext());
         sides.setId(View.generateViewId());
-        sides.setText("numSides");
         RelativeLayout.LayoutParams slp = new RelativeLayout.LayoutParams(TEXT_WIDTH, ToolConfigOptionsView.DEFAULT_HEIGHT);
         slp.addRule(RIGHT_OF, minusButton.getId());
         sides.setLayoutParams(slp);
@@ -51,7 +61,19 @@ public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
         RelativeLayout.LayoutParams pblp = new RelativeLayout.LayoutParams(BUTTON_WIDTH, ToolConfigOptionsView.DEFAULT_HEIGHT);
         pblp.addRule(RIGHT_OF, sides.getId());
         plusButton.setLayoutParams(pblp);
+        plusButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numSides < 12) {
+                    numSides++;
+
+                    sides.setText(String.valueOf(numSides));
+                }
+            }
+        });
         addView(plusButton);
+
+        sides.setText(String.valueOf(numSides));
     }
 
     public ToolConfigOptionsSpinner(Context context, AttributeSet attrs) {
@@ -65,6 +87,8 @@ public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
     public ToolConfigOptionsSpinner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
+    public int getNumSides() { return numSides; }
 
     @Override
     public String getNextName() {
