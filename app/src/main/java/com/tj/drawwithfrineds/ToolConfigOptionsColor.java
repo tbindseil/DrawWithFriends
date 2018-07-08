@@ -155,4 +155,19 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
     public int getDefaultHeight() {
         return 3 * DEFAULT_HEIGHT;
     }
+
+    @Override
+    protected void handleStateFirst() {
+        super.handleStateFirst();
+        seekBarRed.setEnabled(true);
+        seekBarGreen.setEnabled(true);
+        seekBarBlue.setEnabled(true);
+    }
+
+    protected void handleStateNotFirst() {
+        super.handleStateNotFirst();
+        seekBarRed.setEnabled(false);
+        seekBarGreen.setEnabled(false);
+        seekBarBlue.setEnabled(false);
+    }
 }

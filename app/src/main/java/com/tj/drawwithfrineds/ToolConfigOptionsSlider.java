@@ -66,4 +66,16 @@ public class ToolConfigOptionsSlider extends ToolConfigOptionsView {
     }
 
     public int getSeekPos() { return seekPos; }
+
+
+    @Override
+    protected void handleStateFirst() {
+        super.handleStateFirst();
+        seekBar.setEnabled(true);
+    }
+
+    protected void handleStateNotFirst() {
+        super.handleStateNotFirst();
+        seekBar.setEnabled(false);
+    }
 }
