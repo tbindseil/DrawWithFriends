@@ -29,6 +29,8 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
     private int seekPosGreen;
     private int seekPosBlue;
 
+    private int color;
+
     private ImageView sample;
     private Bitmap sampleBmp;
     private int[] sampleColors;
@@ -148,7 +150,8 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
         int red = seekPosRed & 0xff;
         int green = seekPosGreen & 0xff;
         int blue = seekPosBlue & 0xff;
-        setBackgroundColor(((int)(0xff << 24)) | ((int)(red << 16)) | ((int)(green << 8)) | ((int)(blue)));
+        color = ((int)(0xff << 24)) | ((int)(red << 16)) | ((int)(green << 8)) | ((int)(blue));
+        setBackgroundColor(color);
         invalidate();
     }
 
@@ -169,5 +172,9 @@ public class ToolConfigOptionsColor extends ToolConfigOptionsView {
         seekBarRed.setEnabled(false);
         seekBarGreen.setEnabled(false);
         seekBarBlue.setEnabled(false);
+    }
+
+    public Object getValue() {
+        return color;
     }
 }

@@ -61,4 +61,9 @@ public class ToolConfigOptionsNOTDONEYET extends ToolConfigOptionsView {
     public String getNextName() {
         return "";
     }
+
+    @Override
+    public Object getValue() {
+        return null;
+    }
 }

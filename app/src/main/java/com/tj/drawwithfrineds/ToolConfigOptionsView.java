@@ -130,13 +130,6 @@ static boolean thingybopper = false;
                     arg.add(options[i][j]);
                 }
 
-// sorry folks.....
-if (nextClass.contains("ToolConfigOptionsColor")) {
-    ToolConfigOptionsView ret;
-    ret = new ToolConfigOptionsColor(this.getContext(), arg);
-    return ret;
-}
-
                 // crazy java stuff
                 ToolConfigOptionsView ret;
                 try {
@@ -159,4 +152,6 @@ if (nextClass.contains("ToolConfigOptionsColor")) {
     }
 
     public abstract String getNextName();
+
+    abstract public Object getValue();
 }

@@ -78,4 +78,8 @@ public class ToolConfigOptionsSlider extends ToolConfigOptionsView {
         super.handleStateNotFirst();
         seekBar.setEnabled(false);
     }
+
+    public Object getValue() {
+        return seekPos;
+    }
 }

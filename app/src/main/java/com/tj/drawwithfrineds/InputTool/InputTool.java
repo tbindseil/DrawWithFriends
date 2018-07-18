@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import com.tj.drawwithfrineds.UpdateMessage.BitmapUpdateMessage;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by TJ on 3/10/2018.
@@ -19,6 +21,12 @@ public abstract class InputTool implements Serializable {
     public static final int RANDOM = 2;
     public static final int QUADRANT = 3;
     // End of InputTool Vals
+
+    private Map<String, Object> configurationTable;
+
+    public InputTool(Map<String, Object> configTable) {
+        configurationTable = configTable;
+    }
 
     public abstract BitmapUpdateMessage[] handleTouch(MotionEvent ev, ImageView canvas);
 }

@@ -26,6 +26,7 @@ import java.util.Map;
 public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
     private RadioGroup rg;
     private List<ToolConfigOptionsRadioButton> rbs;
+    private String nextNameCache;
 
     public ToolConfigOptionsRadio(Context context, List<String> options) {
         super(context);
@@ -85,10 +86,15 @@ public class ToolConfigOptionsRadio extends ToolConfigOptionsView {
 
         for (ToolConfigOptionsRadioButton rb: rbs) {
             if (rb.getId() == checkedId) {
-                return rb.getNext();
+                nextNameCache = rb.getNext();
+                return nextNameCache;
             }
         }
         return "";
+    }
+
+    public Object getValue() {
+        return nextNameCache;
     }
 }
 

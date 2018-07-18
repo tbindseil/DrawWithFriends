@@ -19,7 +19,7 @@ public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
     private String next = "";
 
     TextView sides;
-    private int numSides;
+    private int numSides; // TODO this is not generic numNuts!@@!!!!!
 
     private final int BUTTON_WIDTH = 300;
     private final int TEXT_WIDTH = 200;
@@ -93,5 +93,9 @@ public class ToolConfigOptionsSpinner extends ToolConfigOptionsView {
     @Override
     public String getNextName() {
         return next;
+    }
+
+    public Object getValue() {
+        return numSides;
     }
 }

@@ -23,7 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
@@ -128,7 +132,6 @@ public class ToolSelectionActivity extends AppCompatActivity {
                 break;
             case R.id.action_save:
                 intent.putExtra(getString(R.string.tool_select_intent), 0);
-    //            loadConfiguredTool(intent);
                 startActivity(intent);
                 break;
             default:
@@ -147,6 +150,25 @@ public class ToolSelectionActivity extends AppCompatActivity {
     public void setTitle(String str) {
         title.setText(str);
         title.setGravity(CENTER_HORIZONTAL);
+    }
+
+    public Map<String, ?> process(List<ToolSelectionTagVal> accumulatedTags) {
+
+
+        // start with nothing, build to completion recursively, **later** such overkill dude
+        // probably just gonna make a set where its indexed by the tag
+        HashMap<String, Object> ret = new HashMap<>();
+        Iterator<ToolConfigOptionsView> itr = configStack.iterator();
+        while (itr.hasNext()) {
+            ToolConfigOptionsView curr = itr.next();
+            ret.put(curr.getConfigOptionsName(), curr.getValue());
+        }
+        return ret;
+    }
+
+    static class ToolSelectionTagVal<V> {
+        public String tag;
+        public V val;
     }
 }
 
